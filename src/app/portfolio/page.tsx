@@ -9,24 +9,6 @@ const projects = [
     href: "/projects/edmonton-snow-crisis.html",
     featured: true,
   },
-  {
-    title: "Skill Analytics Pipeline",
-    description:
-      "End-to-end medallion architecture data pipeline for workforce skill analytics. Bronze, silver, and gold layer transformations with incremental processing.",
-    tags: ["Python", "Spark", "Delta Lake", "Azure"],
-  },
-  {
-    title: "Interactive Dashboard",
-    description:
-      "Business intelligence dashboard providing real-time insights into key organizational metrics and workforce trends.",
-    tags: ["Power BI", "SQL", "DAX"],
-  },
-  {
-    title: "Data Quality Framework",
-    description:
-      "Automated data quality checks and monitoring across multiple data sources, ensuring pipeline reliability and data integrity.",
-    tags: ["Python", "Great Expectations", "CI/CD"],
-  },
 ];
 
 export default function Portfolio() {

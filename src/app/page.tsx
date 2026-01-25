@@ -9,8 +9,7 @@ export default function Home() {
           lovedata
         </p>
         <p className="text-foreground/80 max-w-lg mx-auto text-lg leading-relaxed">
-          Data analytics, engineering, and consulting.
-          Turning raw data into meaningful insight.
+          A passion project to tell data stories and share insights.
         </p>
       </div>
 

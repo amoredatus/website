@@ -5,22 +5,11 @@ export default function Contact() {
         contact
       </h1>
       <p className="text-muted mb-12">
-        Interested in working together? Reach out.
+        Want to connect? Find me here.
       </p>
 
       <div className="space-y-6">
         <div className="flex flex-col gap-4">
-          <a
-            href="mailto:jordan.kirchner@amoredatus.com"
-            className="flex items-center gap-3 p-4 bg-surface rounded-lg border border-surface-hover hover:border-primary/50 transition-colors no-underline"
-          >
-            <span className="text-primary-light text-lg">@</span>
-            <div>
-              <p className="text-foreground text-sm font-heading font-medium uppercase tracking-wider">email</p>
-              <p className="text-muted text-sm">jordan.kirchner@amoredatus.com</p>
-            </div>
-          </a>
-
           <a
             href="https://linkedin.com/in/jordankirchner"
             target="_blank"
