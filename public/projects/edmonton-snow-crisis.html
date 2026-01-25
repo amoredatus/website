@@ -402,7 +402,7 @@
         </div>
 
         <div class="chart-container">
-            <h3 class="chart-title">Complaints vs Snowfall Over Time</h3>
+            <h3 class="chart-title">Complaints (per capita) vs Snowfall (normalized)</h3>
             <div id="overview-chart" class="chart-wrapper"></div>
         </div>
 
@@ -717,6 +717,19 @@
                     Find Your Councillor →
                 </a>
             </div>
+
+            <div class="chart-container" style="margin-bottom: 0;">
+                <h3 class="chart-title" style="color: var(--primary-light); font-size: 1.3rem;">💻 Explore the Code & Data</h3>
+                <p style="color: var(--muted); margin-bottom: 20px; font-size: 1rem;">
+                    This analysis is fully open source. View the raw data, Python scripts, and visualization code on GitHub. Fork it, improve it, or use the methodology for your own city's data.
+                </p>
+                <a href="https://github.com/amoredatus/website" target="_blank"
+                   style="display: inline-block; padding: 14px 28px; background: var(--primary); color: var(--background);
+                          border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 1rem;
+                          transition: background 0.2s ease;">
+                    View on GitHub →
+                </a>
+            </div>
         </div>
 
         <div class="takeaway" style="margin-top: 40px;">
@@ -868,36 +881,47 @@
             });
         });
 
-        // Overview Chart
+        // Overview Chart - normalized data
         const years = data.yearly.map(d => d.year);
+
+        // Complaints per 100 people
+        const complaintsPerCapita = data.yearly.map(d => (d.complaints / d.population) * 100);
+
+        // Snowfall normalized 0-1
+        const maxSnowfall = Math.max(...data.yearly.map(d => d.snowfall_cm));
+        const minSnowfall = Math.min(...data.yearly.map(d => d.snowfall_cm));
+        const snowfallNormalized = data.yearly.map(d => (d.snowfall_cm - minSnowfall) / (maxSnowfall - minSnowfall));
+
         Plotly.newPlot('overview-chart', [
             {
                 x: years,
-                y: data.yearly.map(d => d.complaints),
+                y: complaintsPerCapita,
                 type: 'bar',
-                name: 'Complaints',
+                name: 'Complaints per 100 residents',
                 marker: { color: colors.primaryLight }
             },
             {
                 x: years,
-                y: data.yearly.map(d => d.snowfall_cm),
+                y: snowfallNormalized,
                 type: 'scatter',
                 mode: 'lines+markers',
-                name: 'Snowfall (cm)',
+                name: 'Snowfall (normalized)',
                 yaxis: 'y2',
-                line: { color: colors.accent, width: 3 },
-                marker: { size: 8, color: colors.accent }
+                line: { color: colors.warning, width: 3 },
+                marker: { size: 8, color: colors.warning }
             }
         ], {
             ...baseLayout,
+            margin: { t: 30, r: 80, b: 50, l: 80 },
             xaxis: { ...baseLayout.xaxis, tickmode: 'array', tickvals: years },
-            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints', font: { color: colors.muted } } },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints per 100 residents', font: { color: colors.muted }, standoff: 10 } },
             yaxis2: {
-                title: { text: 'Snowfall (cm)', font: { color: colors.muted } },
+                title: { text: 'Snowfall (0-1 normalized)', font: { color: colors.muted }, standoff: 10 },
                 overlaying: 'y',
                 side: 'right',
                 showgrid: false,
-                zeroline: false
+                zeroline: false,
+                range: [0, 1.1]
             },
             legend: { x: 0.5, y: 1.12, orientation: 'h', xanchor: 'center', font: { color: colors.foreground } },
             barmode: 'group'
