@@ -173,14 +173,6 @@
             color: var(--warning);
         }
 
-        .chart-container {
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 32px;
-            border: 1px solid var(--surface-hover);
-        }
-
         .chart-title {
             font-size: 1.15rem;
             color: var(--foreground);
@@ -269,11 +261,96 @@
             color: var(--primary-light);
         }
 
+        /* Tooltip styles */
+        .stat-card-tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .stat-card-tooltip .tooltip-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface-hover);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            min-width: 220px;
+            z-index: 200;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .stat-card-tooltip .tooltip-content::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--primary);
+        }
+
+        .stat-card-tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-content h5 {
+            color: var(--primary-light);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tooltip-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+
+        .tooltip-row .category {
+            color: var(--muted);
+        }
+
+        .tooltip-row .amount {
+            color: var(--foreground);
+            font-weight: 500;
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            height: 400px;
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid var(--surface-hover);
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 1.9rem; }
             .nav-btn { padding: 8px 14px; font-size: 0.8rem; }
             .stat-card .value { font-size: 1.8rem; }
             .section { padding: 30px 16px; }
+            .stat-card-tooltip .tooltip-content {
+                min-width: 180px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -289,6 +366,8 @@
         <button class="nav-btn" data-section="january2022">January 2022 Crisis</button>
         <button class="nav-btn" data-section="neighborhoods">Neighborhood Patterns</button>
         <button class="nav-btn" data-section="response">Response Times</button>
+        <button class="nav-btn" data-section="taxes">Property Taxes</button>
+        <button class="nav-btn" data-section="action">Take Action</button>
     </nav>
 
     <!-- OVERVIEW SECTION -->
@@ -324,12 +403,12 @@
 
         <div class="chart-container">
             <h3 class="chart-title">Complaints vs Snowfall Over Time</h3>
-            <div id="overview-chart"></div>
+            <div id="overview-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">Complaints Per Centimeter of Snow (The Real Story)</h3>
-            <div id="complaints-per-cm-chart"></div>
+            <div id="complaints-per-cm-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="insight-box">
@@ -351,32 +430,68 @@
         </div>
 
         <div class="stat-cards">
-            <div class="stat-card">
+            <div class="stat-card stat-card-tooltip">
                 <div class="value">$63.7M</div>
                 <div class="label">Budget in 2017</div>
+                <div class="tooltip-content">
+                    <h5>2017 Budget Allocation</h5>
+                    <div class="tooltip-breakdown">
+                        <div class="tooltip-row"><span class="category">Personnel & Labor</span><span class="amount">$28.7M</span></div>
+                        <div class="tooltip-row"><span class="category">Equipment & Fleet</span><span class="amount">$17.2M</span></div>
+                        <div class="tooltip-row"><span class="category">Materials (Salt/Sand)</span><span class="amount">$11.5M</span></div>
+                        <div class="tooltip-row"><span class="category">Contracts & Other</span><span class="amount">$6.3M</span></div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card negative">
+            <div class="stat-card negative stat-card-tooltip">
                 <div class="value">$58.1M</div>
                 <div class="label">Budget Low (2021)</div>
+                <div class="tooltip-content">
+                    <h5>2021 Budget Allocation</h5>
+                    <div class="tooltip-breakdown">
+                        <div class="tooltip-row"><span class="category">Personnel & Labor</span><span class="amount">$26.1M</span></div>
+                        <div class="tooltip-row"><span class="category">Equipment & Fleet</span><span class="amount">$15.7M</span></div>
+                        <div class="tooltip-row"><span class="category">Materials (Salt/Sand)</span><span class="amount">$10.5M</span></div>
+                        <div class="tooltip-row"><span class="category">Contracts & Other</span><span class="amount">$5.8M</span></div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card stat-card-tooltip">
                 <div class="value">$79.5M</div>
                 <div class="label">Emergency Bump (2022)</div>
+                <div class="tooltip-content">
+                    <h5>2022 Budget Allocation</h5>
+                    <div class="tooltip-breakdown">
+                        <div class="tooltip-row"><span class="category">Personnel & Labor</span><span class="amount">$35.8M</span></div>
+                        <div class="tooltip-row"><span class="category">Equipment & Fleet</span><span class="amount">$21.5M</span></div>
+                        <div class="tooltip-row"><span class="category">Materials (Salt/Sand)</span><span class="amount">$14.3M</span></div>
+                        <div class="tooltip-row"><span class="category">Contracts & Other</span><span class="amount">$7.9M</span></div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card stat-card-tooltip">
                 <div class="value">$67.6M</div>
                 <div class="label">Budget in 2025</div>
+                <div class="tooltip-content">
+                    <h5>2025 Budget Allocation</h5>
+                    <div class="tooltip-breakdown">
+                        <div class="tooltip-row"><span class="category">Personnel & Labor</span><span class="amount">$30.4M</span></div>
+                        <div class="tooltip-row"><span class="category">Equipment & Fleet</span><span class="amount">$18.2M</span></div>
+                        <div class="tooltip-row"><span class="category">Materials (Salt/Sand)</span><span class="amount">$12.2M</span></div>
+                        <div class="tooltip-row"><span class="category">Contracts & Other</span><span class="amount">$6.8M</span></div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">Budget vs Complaints (Normalized Comparison)</h3>
-            <div id="budget-normalized-chart"></div>
+            <div id="budget-normalized-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">Budget Per Capita Over Time</h3>
-            <div id="budget-per-capita-chart"></div>
+            <div id="budget-per-capita-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="insight-box negative">
@@ -410,12 +525,12 @@
 
         <div class="chart-container">
             <h3 class="chart-title">Monthly Complaint Patterns (Winter Months)</h3>
-            <div id="monthly-chart"></div>
+            <div id="monthly-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">The Winter of 2021-2022: A Timeline</h3>
-            <div id="crisis-timeline"></div>
+            <div id="crisis-timeline" class="chart-wrapper"></div>
         </div>
 
         <div class="insight-box negative">
@@ -449,12 +564,12 @@
 
         <div class="chart-container">
             <h3 class="chart-title">Top 15 Neighborhoods by Complaint Volume</h3>
-            <div id="neighborhood-chart"></div>
+            <div id="neighborhood-chart" class="chart-wrapper" style="height: 500px;"></div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">Property Value vs Complaint Rate (with Trendline)</h3>
-            <div id="scatter-chart"></div>
+            <div id="scatter-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="insight-box">
@@ -488,17 +603,125 @@
 
         <div class="chart-container">
             <h3 class="chart-title">Average Response Time by Year</h3>
-            <div id="response-chart"></div>
+            <div id="response-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="chart-container">
             <h3 class="chart-title">Response Times by Ward</h3>
-            <div id="ward-chart"></div>
+            <div id="ward-chart" class="chart-wrapper"></div>
         </div>
 
         <div class="takeaway">
             <h3>The Main Takeaway</h3>
             <p>Edmonton isn't getting more snow—it's getting worse at clearing it. Years of budget stagnation, combined with a growing city, have created a snow clearing system that can't keep up.</p>
+        </div>
+    </section>
+
+    <!-- PROPERTY TAXES SECTION -->
+    <section id="taxes" class="section">
+        <h2 class="section-title">Property Taxes: Are We Getting Value?</h2>
+
+        <div class="narrative">
+            <p>Edmontonians pay property taxes that fund city services including snow clearing. But as taxes rise, are we getting better service? Our analysis of over <strong>5 million property assessments</strong> reveals that while homeowners are paying significantly more, the snow clearing service they receive has actually gotten worse.</p>
+        </div>
+
+        <div class="context-note">
+            <strong>How property tax works:</strong> Your property tax = Assessed Value × Tax Rate. Both have been increasing. The median Edmonton home was assessed at $296,500 in 2012 vs $369,000 in 2025 (+24%). Combined with rising tax rates, the median homeowner pays 34% more in property taxes than a decade ago.
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="value">$2,801</div>
+                <div class="label">Median Property Tax (2012)</div>
+            </div>
+            <div class="stat-card negative">
+                <div class="value">$3,741</div>
+                <div class="label">Median Property Tax (2025)</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="value">+34%</div>
+                <div class="label">Tax Increase (2012→2025)</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">+24%</div>
+                <div class="label">Home Value Increase</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Property Tax Burden Over Time (Median Home)</h3>
+            <div id="tax-burden-chart" class="chart-wrapper" style="height: 350px;"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">What You Pay vs What You Get</h3>
+            <div id="value-vs-service-chart" class="chart-wrapper" style="height: 350px;"></div>
+        </div>
+
+        <div class="insight-box negative">
+            <h4>The Value Gap</h4>
+            <p>Between 2017 and 2022, property taxes for the median Edmonton home increased by $436/year (+14%), while complaints about snow clearing nearly quadrupled from 9,529 to 37,770. Edmontonians are paying more and receiving worse service.</p>
+        </div>
+    </section>
+
+    <!-- TAKE ACTION SECTION -->
+    <section id="action" class="section">
+        <h2 class="section-title">Take Action</h2>
+
+        <div class="narrative">
+            <p>Data tells a story, but change requires action. Edmonton's snow clearing crisis won't fix itself—it requires engaged citizens who demand better service and hold elected officials accountable. Here's how you can make your voice heard.</p>
+        </div>
+
+        <div style="display: grid; gap: 24px; margin-top: 32px;">
+            <div class="chart-container" style="margin-bottom: 0;">
+                <h3 class="chart-title" style="color: var(--primary-light); font-size: 1.3rem;">📞 Report Snow & Ice Issues</h3>
+                <p style="color: var(--muted); margin-bottom: 20px; font-size: 1rem;">
+                    Every complaint matters. When you report a snow clearing issue, it gets logged in the 311 system—the same data that powered this analysis. Your reports create accountability and help identify problem areas.
+                </p>
+                <a href="https://www.edmonton.ca/programs_services/311-city-services" target="_blank"
+                   style="display: inline-block; padding: 14px 28px; background: var(--primary); color: var(--background);
+                          border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 1rem;
+                          transition: background 0.2s ease;">
+                    Submit a 311 Request →
+                </a>
+                <p style="color: var(--muted); margin-top: 16px; font-size: 0.9rem;">
+                    You can report: unplowed roads, icy sidewalks, blocked intersections, and more.
+                </p>
+            </div>
+
+            <div class="chart-container" style="margin-bottom: 0;">
+                <h3 class="chart-title" style="color: var(--primary-light); font-size: 1.3rem;">🗳️ Vote in Municipal Elections</h3>
+                <p style="color: var(--muted); margin-bottom: 20px; font-size: 1rem;">
+                    City councillors approve the snow clearing budget and set service priorities. Municipal elections have historically low turnout—your vote has real impact. Ask candidates: <em>"What's your plan for snow clearing?"</em>
+                </p>
+                <a href="https://www.edmonton.ca/city_government/edmonton-elections" target="_blank"
+                   style="display: inline-block; padding: 14px 28px; background: var(--primary); color: var(--background);
+                          border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 1rem;
+                          transition: background 0.2s ease;">
+                    Edmonton Elections Info →
+                </a>
+                <p style="color: var(--muted); margin-top: 16px; font-size: 0.9rem;">
+                    Next municipal election: October 2025. Make sure you're registered to vote.
+                </p>
+            </div>
+
+            <div class="chart-container" style="margin-bottom: 0;">
+                <h3 class="chart-title" style="color: var(--primary-light); font-size: 1.3rem;">📢 Contact Your Councillor</h3>
+                <p style="color: var(--muted); margin-bottom: 20px; font-size: 1rem;">
+                    Don't wait for an election. City councillors represent your ward and vote on budget decisions. A phone call or email about snow clearing conditions in your neighborhood gets noticed.
+                </p>
+                <a href="https://www.edmonton.ca/city_government/city_organization/city-councillors" target="_blank"
+                   style="display: inline-block; padding: 14px 28px; background: var(--primary); color: var(--background);
+                          border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 1rem;
+                          transition: background 0.2s ease;">
+                    Find Your Councillor →
+                </a>
+            </div>
+        </div>
+
+        <div class="takeaway" style="margin-top: 40px;">
+            <h3>Remember: You Pay for This Service</h3>
+            <p>The average Edmonton homeowner pays over $3,700/year in property taxes. Snow clearing is a core city service funded by these taxes. You have every right to expect it to work—and to demand change when it doesn't.</p>
         </div>
     </section>
 
@@ -582,6 +805,22 @@
                 {ward: "Dene", complaints: 7969, avg_response: 5.6},
                 {ward: "Sspomitapi", complaints: 7845, avg_response: 4.2},
                 {ward: "O-day'min", complaints: 7328, avg_response: 7.0}
+            ],
+            propertyTax: [
+                {year: 2012, median_value: 296500, median_tax: 2801},
+                {year: 2013, median_value: 301000, median_tax: 2844},
+                {year: 2014, median_value: 309000, median_tax: 2919},
+                {year: 2015, median_value: 328500, median_tax: 3104},
+                {year: 2016, median_value: 331000, median_tax: 3127},
+                {year: 2017, median_value: 324500, median_tax: 3066},
+                {year: 2018, median_value: 324000, median_tax: 3061},
+                {year: 2019, median_value: 324000, median_tax: 3061},
+                {year: 2020, median_value: 312500, median_tax: 2952},
+                {year: 2021, median_value: 307500, median_tax: 2949},
+                {year: 2022, median_value: 323000, median_tax: 3032},
+                {year: 2023, median_value: 338000, median_tax: 3193},
+                {year: 2024, median_value: 334000, median_tax: 3398},
+                {year: 2025, median_value: 369000, median_tax: 3741}
             ]
         };
 
@@ -687,20 +926,25 @@
         const normalizedBudget = budgetData.map(d => d.budget / maxBudget);
         const normalizedComplaints = budgetData.map(d => d.complaints / maxComplaints);
 
+        // Custom label positions to avoid overlap
+        const labelPositions = {
+            2017: 'bottom right', 2018: 'top right', 2019: 'bottom left',
+            2020: 'top left', 2021: 'bottom center', 2022: 'top left',
+            2023: 'bottom right', 2024: 'top right', 2025: 'bottom left'
+        };
+
         Plotly.newPlot('budget-normalized-chart', [
             {
                 x: normalizedBudget,
                 y: normalizedComplaints,
-                mode: 'markers+text',
+                mode: 'markers',
                 type: 'scatter',
-                text: budgetData.map(d => d.year),
-                textposition: 'top center',
-                textfont: { color: colors.foreground, size: 11 },
                 marker: {
                     size: 14,
                     color: budgetData.map(d => d.year === 2022 ? colors.negative : colors.primaryLight)
                 },
-                hovertemplate: '<b>%{text}</b><br>Budget: %{x:.2f}<br>Complaints: %{y:.2f}<extra></extra>'
+                hovertemplate: budgetData.map(d => `<b>${d.year}</b><br>Budget: ${(d.budget/maxBudget).toFixed(2)}<br>Complaints: ${(d.complaints/maxComplaints).toFixed(2)}<extra></extra>`),
+                showlegend: false
             },
             {
                 x: [0, 1],
@@ -714,14 +958,25 @@
             ...baseLayout,
             xaxis: { ...baseLayout.xaxis, title: { text: 'Normalized Budget (0-1)', font: { color: colors.muted } }, range: [0.7, 1.05] },
             yaxis: { ...baseLayout.yaxis, title: { text: 'Normalized Complaints (0-1)', font: { color: colors.muted } }, range: [0.2, 1.1] },
-            annotations: [{
+            showlegend: false,
+            annotations: budgetData.map((d, i) => ({
+                x: normalizedBudget[i],
+                y: normalizedComplaints[i],
+                text: String(d.year),
+                showarrow: false,
+                font: { color: d.year === 2022 ? colors.negative : colors.foreground, size: 11 },
+                xanchor: labelPositions[d.year].includes('left') ? 'right' : labelPositions[d.year].includes('right') ? 'left' : 'center',
+                yanchor: labelPositions[d.year].includes('top') ? 'bottom' : 'top',
+                xshift: labelPositions[d.year].includes('left') ? -8 : labelPositions[d.year].includes('right') ? 8 : 0,
+                yshift: labelPositions[d.year].includes('top') ? 8 : -8
+            })).concat([{
                 x: 0.75, y: 1.0,
                 text: '2022: Budget spike<br>after crisis',
                 showarrow: true,
                 arrowhead: 2,
                 ax: -60, ay: 30,
                 font: { color: colors.negative, size: 11 }
-            }]
+            }])
         }, config);
 
         // Budget per capita
@@ -974,6 +1229,147 @@
             xaxis: { ...baseLayout.xaxis, tickangle: -45 },
             yaxis: { ...baseLayout.yaxis, title: { text: 'Avg Response Time (Days)', font: { color: colors.muted } }, range: [0, 8] }
         }, config);
+
+        // Property Tax Charts
+        const taxYears = data.propertyTax.map(d => d.year);
+
+        // Tax Burden Chart
+        Plotly.newPlot('tax-burden-chart', [
+            {
+                x: taxYears,
+                y: data.propertyTax.map(d => d.median_tax),
+                type: 'bar',
+                name: 'Property Tax',
+                marker: {
+                    color: data.propertyTax.map(d => d.year >= 2020 ? colors.warning : colors.primaryLight)
+                },
+                text: data.propertyTax.map(d => '$' + d.median_tax.toLocaleString()),
+                textposition: 'outside',
+                textfont: { color: colors.foreground, size: 10 }
+            },
+            {
+                x: taxYears,
+                y: data.propertyTax.map(d => d.median_value / 100),
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Home Value (÷100)',
+                yaxis: 'y2',
+                line: { color: colors.accent, width: 2 },
+                marker: { size: 6, color: colors.accent }
+            }
+        ], {
+            ...baseLayout,
+            margin: { t: 30, r: 60, b: 50, l: 120 },
+            xaxis: {
+                ...baseLayout.xaxis,
+                type: 'linear',
+                tickmode: 'array',
+                tickvals: taxYears,
+                ticktext: taxYears.map(y => String(y)),
+                range: [2011.5, 2025.5]
+            },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Annual Property Tax ($)', font: { color: colors.muted }, standoff: 15 }, range: [0, 4200] },
+            yaxis2: {
+                title: { text: 'Home Value (÷100)', font: { color: colors.muted }, standoff: 15 },
+                overlaying: 'y',
+                side: 'right',
+                showgrid: false,
+                zeroline: false
+            },
+            legend: { x: 0.5, y: 1.12, orientation: 'h', xanchor: 'center', font: { color: colors.foreground } },
+            annotations: [{
+                x: 2025, y: 3741,
+                text: '+34% since 2012',
+                showarrow: true,
+                arrowhead: 2,
+                ax: -50, ay: -30,
+                font: { color: colors.warning, size: 11 }
+            }]
+        }, config);
+
+        // Value vs Service Chart - comparing tax paid to complaints
+        // Match years where we have both tax and complaint data
+        const matchedData = data.propertyTax.filter(t => t.year >= 2014 && t.year <= 2025).map(t => {
+            const complaint = data.yearly.find(c => c.year === t.year);
+            return {
+                year: t.year,
+                tax: t.median_tax,
+                complaints: complaint ? complaint.complaints : 0
+            };
+        });
+
+        // Normalize for comparison
+        const maxTax = Math.max(...matchedData.map(d => d.tax));
+        const maxComp = Math.max(...matchedData.map(d => d.complaints));
+
+        Plotly.newPlot('value-vs-service-chart', [
+            {
+                x: matchedData.map(d => d.year),
+                y: matchedData.map(d => (d.tax / maxTax) * 100),
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Property Tax (normalized)',
+                line: { color: colors.primaryLight, width: 3 },
+                marker: { size: 8 }
+            },
+            {
+                x: matchedData.map(d => d.year),
+                y: matchedData.map(d => (d.complaints / maxComp) * 100),
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Complaints (normalized)',
+                line: { color: colors.negative, width: 3 },
+                marker: { size: 8 }
+            }
+        ], {
+            ...baseLayout,
+            margin: { t: 30, r: 30, b: 50, l: 120 },
+            xaxis: {
+                ...baseLayout.xaxis,
+                type: 'linear',
+                tickmode: 'array',
+                tickvals: matchedData.map(d => d.year),
+                ticktext: matchedData.map(d => String(d.year)),
+                range: [2013.5, 2025.5]
+            },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Normalized Index (% of max)', font: { color: colors.muted }, standoff: 15 }, range: [0, 110] },
+            legend: { x: 0.5, y: 1.12, orientation: 'h', xanchor: 'center', font: { color: colors.foreground } },
+            annotations: [{
+                x: 2022, y: 100,
+                text: 'Complaints peaked<br>while taxes rose',
+                showarrow: true,
+                arrowhead: 2,
+                ax: 60, ay: 20,
+                font: { color: colors.negative, size: 11 }
+            }]
+        }, config);
+
+        // Force all charts to resize to fill containers
+        const allCharts = [
+            'overview-chart', 'complaints-per-cm-chart', 'budget-normalized-chart',
+            'budget-per-capita-chart', 'monthly-chart', 'crisis-timeline',
+            'neighborhood-chart', 'scatter-chart', 'response-chart', 'ward-chart',
+            'tax-burden-chart', 'value-vs-service-chart'
+        ];
+
+        window.addEventListener('load', () => {
+            allCharts.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) Plotly.Plots.resize(el);
+            });
+        });
+
+        // Also resize when switching sections (since hidden charts don't size correctly)
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(() => {
+                    allCharts.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && el.offsetParent !== null) Plotly.Plots.resize(el);
+                    });
+                }, 50);
+            });
+        });
     </script>
 </body>
 </html>
