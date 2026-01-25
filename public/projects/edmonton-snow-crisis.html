@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edmonton's Snow Clearing Crisis | Data Story</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #0f0f0f;
+            --foreground: #e0e0e0;
+            --surface: #1a1a1a;
+            --surface-hover: #2a2a2a;
+            --primary: #2d6a4f;
+            --primary-light: #95d5b2;
+            --accent: #b7e4c7;
+            --muted: #888888;
+            --negative: #e57373;
+            --warning: #ffb74d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, rgba(45,106,79,0.15) 0%, transparent 100%);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+
+        .header .subtitle {
+            font-size: 1.15rem;
+            color: var(--muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .nav-slicer {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 24px 20px;
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--surface-hover);
+        }
+
+        .nav-btn {
+            padding: 10px 22px;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(45,106,79,0.2);
+            border-color: var(--primary-light);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: var(--background);
+            border-color: var(--primary);
+        }
+
+        .section {
+            display: none;
+            padding: 50px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            color: var(--primary-light);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .narrative {
+            background: var(--surface);
+            padding: 24px 28px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .narrative p {
+            font-size: 1.05rem;
+            color: var(--muted);
+        }
+
+        .narrative strong {
+            color: var(--foreground);
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 24px 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--surface-hover);
+        }
+
+        .stat-card .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-card .label {
+            color: var(--muted);
+            margin-top: 6px;
+            font-size: 0.85rem;
+        }
+
+        .stat-card.negative .value {
+            color: var(--negative);
+        }
+
+        .stat-card.warning .value {
+            color: var(--warning);
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid var(--surface-hover);
+        }
+
+        .chart-title {
+            font-size: 1.15rem;
+            color: var(--foreground);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .insight-box {
+            background: var(--surface);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-top: 24px;
+        }
+
+        .insight-box h4 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .insight-box p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .insight-box.negative {
+            border-color: var(--negative);
+        }
+
+        .insight-box.negative h4 {
+            color: var(--negative);
+        }
+
+        .takeaway {
+            background: var(--primary);
+            color: var(--background);
+            padding: 32px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .takeaway h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--background);
+        }
+
+        .takeaway p {
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: rgba(15,15,15,0.85);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--surface-hover);
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--accent);
+        }
+
+        .context-note {
+            background: rgba(45,106,79,0.1);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .context-note strong {
+            color: var(--primary-light);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.9rem; }
+            .nav-btn { padding: 8px 14px; font-size: 0.8rem; }
+            .stat-card .value { font-size: 1.8rem; }
+            .section { padding: 30px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Edmonton's Snow Clearing Crisis</h1>
+        <p class="subtitle">When Budgets Freeze but Complaints Melt Records: A Data Story About Winter in Edmonton</p>
+    </header>
+
+    <nav class="nav-slicer">
+        <button class="nav-btn active" data-section="overview">Overview</button>
+        <button class="nav-btn" data-section="budget">Budget vs Reality</button>
+        <button class="nav-btn" data-section="january2022">January 2022 Crisis</button>
+        <button class="nav-btn" data-section="neighborhoods">Neighborhood Patterns</button>
+        <button class="nav-btn" data-section="response">Response Times</button>
+    </nav>
+
+    <!-- OVERVIEW SECTION -->
+    <section id="overview" class="section active">
+        <h2 class="section-title">The Big Picture</h2>
+
+        <div class="narrative">
+            <p>Between 2014 and 2025, Edmonton residents filed over <strong>209,000 snow and ice complaints</strong> through the city's 311 system. But here's the surprising truth: it's not about how much snow is falling—it's about how the city responds to it. Our analysis reveals a troubling trend: even as snowfall decreases, complaints are skyrocketing. Something is fundamentally broken in Edmonton's snow clearing operations.</p>
+        </div>
+
+        <div class="context-note">
+            <strong>Context:</strong> Edmonton's population grew from 1.26M (2014) to 1.59M (2025) — a 26% increase. During this same period, snow complaints increased by 7% while the snow clearing budget only grew 6%.
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="value">209,206</div>
+                <div class="label">Total Snow Complaints (2014-2025)</div>
+            </div>
+            <div class="stat-card negative">
+                <div class="value">+296%</div>
+                <div class="label">Complaint Increase (2017→2022)</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="value">37,770</div>
+                <div class="label">Worst Year (2022)</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">+26%</div>
+                <div class="label">Population Growth</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Complaints vs Snowfall Over Time</h3>
+            <div id="overview-chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Complaints Per Centimeter of Snow (The Real Story)</h3>
+            <div id="complaints-per-cm-chart"></div>
+        </div>
+
+        <div class="insight-box">
+            <h4>Key Insight</h4>
+            <p>In 2017, Edmonton received 317cm of snow and 9,529 complaints (30 complaints/cm). By 2023, with only 62cm of snow, there were still 15,084 complaints (242 complaints/cm). Residents aren't complaining because of more snow—they're complaining because the service is deteriorating.</p>
+        </div>
+    </section>
+
+    <!-- BUDGET SECTION -->
+    <section id="budget" class="section">
+        <h2 class="section-title">Budget vs Reality</h2>
+
+        <div class="narrative">
+            <p>Edmonton's Snow and Ice Control budget tells a story of chronic underinvestment. While the city's population grew 26% and resident expectations increased, the snow clearing budget barely kept pace with inflation—let alone the exploding demand for service.</p>
+        </div>
+
+        <div class="context-note">
+            <strong>Population context:</strong> In 2017, Edmonton had ~1.36M residents. By 2025, that grew to ~1.59M. Budget per capita actually <em>decreased</em> from $46.84 to $42.52 — an 9% decline in per-person investment.
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="value">$63.7M</div>
+                <div class="label">Budget in 2017</div>
+            </div>
+            <div class="stat-card negative">
+                <div class="value">$58.1M</div>
+                <div class="label">Budget Low (2021)</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">$79.5M</div>
+                <div class="label">Emergency Bump (2022)</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">$67.6M</div>
+                <div class="label">Budget in 2025</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Budget vs Complaints (Normalized Comparison)</h3>
+            <div id="budget-normalized-chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Budget Per Capita Over Time</h3>
+            <div id="budget-per-capita-chart"></div>
+        </div>
+
+        <div class="insight-box negative">
+            <h4>The 2020-2021 Budget Cuts</h4>
+            <p>Between 2019 and 2021, the snow clearing budget was cut by nearly $6 million (from $63.7M to $58.1M). The result? Complaints doubled from 14,992 to 26,614 in 2020. The city's reactive 2022 budget increase came only after the January 2022 disaster.</p>
+        </div>
+    </section>
+
+    <!-- JANUARY 2022 SECTION -->
+    <section id="january2022" class="section">
+        <h2 class="section-title">The January 2022 Crisis</h2>
+
+        <div class="narrative">
+            <p>January 2022 wasn't just bad—it was catastrophic. In a single month, Edmonton received more snow complaints than the entire year of 2016. The 311 system was overwhelmed, response times stretched to breaking point, and residents took to social media to document impassable streets.</p>
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card negative">
+                <div class="value">13,632</div>
+                <div class="label">Complaints in January 2022</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">3,396</div>
+                <div class="label">All of 2016 for comparison</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="value">4x</div>
+                <div class="label">Higher than typical January</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Monthly Complaint Patterns (Winter Months)</h3>
+            <div id="monthly-chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">The Winter of 2021-2022: A Timeline</h3>
+            <div id="crisis-timeline"></div>
+        </div>
+
+        <div class="insight-box negative">
+            <h4>The Perfect Storm</h4>
+            <p>December 2021 saw 10,313 complaints—already a warning sign. Then January 2022 exploded to 13,632, followed by February at 9,839. In just three months, the city received nearly 34,000 complaints—more than most entire years.</p>
+        </div>
+    </section>
+
+    <!-- NEIGHBORHOODS SECTION -->
+    <section id="neighborhoods" class="section">
+        <h2 class="section-title">Neighborhood Patterns</h2>
+
+        <div class="narrative">
+            <p>Not all neighborhoods experience snow clearing equally. Our analysis reveals patterns: some areas consistently file more complaints, and there's a measurable correlation between property values and complaint rates.</p>
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="value">0.41</div>
+                <div class="label">Correlation: Home Value ↔ Complaints</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">Downtown</div>
+                <div class="label">Most Total Complaints</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">Kenilworth</div>
+                <div class="label">Highest Rate per Capita</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Top 15 Neighborhoods by Complaint Volume</h3>
+            <div id="neighborhood-chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Property Value vs Complaint Rate (with Trendline)</h3>
+            <div id="scatter-chart"></div>
+        </div>
+
+        <div class="insight-box">
+            <h4>What This Means</h4>
+            <p>The positive correlation (0.41) between property values and complaints suggests wealthier neighborhoods complain more. This could indicate higher expectations, better awareness of 311, or genuinely worse service in newer suburban developments with longer routes.</p>
+        </div>
+    </section>
+
+    <!-- RESPONSE TIMES SECTION -->
+    <section id="response" class="section">
+        <h2 class="section-title">Response Times</h2>
+
+        <div class="narrative">
+            <p>How long does it take the city to address a snow complaint? The answer has varied dramatically—and tells another story of declining service. Response times peaked during the budget cut years and have never fully recovered.</p>
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="value">2.2 days</div>
+                <div class="label">Best Response (2017)</div>
+            </div>
+            <div class="stat-card negative">
+                <div class="value">7.9 days</div>
+                <div class="label">Worst Response (2020)</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">4.5 days</div>
+                <div class="label">Current Average (2025)</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Average Response Time by Year</h3>
+            <div id="response-chart"></div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Response Times by Ward</h3>
+            <div id="ward-chart"></div>
+        </div>
+
+        <div class="takeaway">
+            <h3>The Main Takeaway</h3>
+            <p>Edmonton isn't getting more snow—it's getting worse at clearing it. Years of budget stagnation, combined with a growing city, have created a snow clearing system that can't keep up.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Data Story by Jordan | Master of Data Science Program</p>
+        <p style="margin-top: 8px;">Data Sources: <a href="https://data.edmonton.ca" target="_blank">Edmonton Open Data Portal</a> | <a href="https://climate.weather.gc.ca" target="_blank">Environment Canada</a> | <a href="https://populationstat.com/canada/edmonton" target="_blank">Population Statistics</a></p>
+        <p style="margin-top: 12px; font-size: 0.8rem; color: #666;">Analysis Period: 2014-2025 | Last Updated: January 2026</p>
+    </footer>
+
+    <script>
+        // Color palette matching portfolio
+        const colors = {
+            primary: '#2d6a4f',
+            primaryLight: '#95d5b2',
+            accent: '#b7e4c7',
+            background: '#0f0f0f',
+            surface: '#1a1a1a',
+            foreground: '#e0e0e0',
+            muted: '#888888',
+            negative: '#e57373',
+            warning: '#ffb74d'
+        };
+
+        // Data with population
+        const data = {
+            yearly: [
+                {year: 2014, complaints: 17415, budget: 0, snowfall_cm: 270.8, complaints_per_cm: 64.3, population: 1259000},
+                {year: 2015, complaints: 6700, budget: 0, snowfall_cm: 242.6, complaints_per_cm: 27.6, population: 1292000},
+                {year: 2016, complaints: 3396, budget: 0, snowfall_cm: 180.8, complaints_per_cm: 18.8, population: 1326000},
+                {year: 2017, complaints: 9529, budget: 63709000, snowfall_cm: 317.0, complaints_per_cm: 30.1, population: 1361000},
+                {year: 2018, complaints: 16838, budget: 65766000, snowfall_cm: 359.3, complaints_per_cm: 46.9, population: 1397000},
+                {year: 2019, complaints: 14992, budget: 63740000, snowfall_cm: 234.6, complaints_per_cm: 63.9, population: 1430000},
+                {year: 2020, complaints: 26614, budget: 60884902, snowfall_cm: 274.5, complaints_per_cm: 97.0, population: 1461000},
+                {year: 2021, complaints: 21647, budget: 58069680, snowfall_cm: 201.0, complaints_per_cm: 107.7, population: 1491000},
+                {year: 2022, complaints: 37770, budget: 79473918, snowfall_cm: 236.1, complaints_per_cm: 160.0, population: 1519000},
+                {year: 2023, complaints: 15084, budget: 63574190, snowfall_cm: 62.3, complaints_per_cm: 242.1, population: 1544000},
+                {year: 2024, complaints: 12478, budget: 67089699, snowfall_cm: 220.2, complaints_per_cm: 56.7, population: 1568000},
+                {year: 2025, complaints: 18718, budget: 67553815, snowfall_cm: 260.1, complaints_per_cm: 72.0, population: 1589000}
+            ],
+            monthlyByYear: {
+                2019: {11: 2782, 12: 744, 1: 3300, 2: 3758, 3: 4145},
+                2020: {11: 3769, 12: 1800, 1: 4857, 2: 7194, 3: 2940},
+                2021: {11: 2455, 12: 10313, 1: 1958, 2: 899, 3: 1310},
+                2022: {11: 2278, 12: 2219, 1: 13632, 2: 9839, 3: 5980},
+                2023: {11: 403, 12: 1164, 1: 6615, 2: 1396, 3: 1656},
+                2024: {11: 1236, 12: 2625, 1: 2096, 2: 1541, 3: 1076}
+            },
+            neighborhoods: [
+                {neighbourhood: "DOWNTOWN", complaints: 3005, median_value: 95000, complaints_per_1000: 296},
+                {neighbourhood: "SUMMERSIDE", complaints: 2382, median_value: 508500, complaints_per_1000: 441},
+                {neighbourhood: "STRATHCONA", complaints: 2182, median_value: 240500, complaints_per_1000: 526},
+                {neighbourhood: "OTTEWELL", complaints: 1991, median_value: 449500, complaints_per_1000: 845},
+                {neighbourhood: "WINDERMERE", complaints: 1989, median_value: 430000, complaints_per_1000: 308},
+                {neighbourhood: "THE HAMPTONS", complaints: 1962, median_value: 441500, complaints_per_1000: 432},
+                {neighbourhood: "LAUREL", complaints: 1809, median_value: 510000, complaints_per_1000: 409},
+                {neighbourhood: "WESTMOUNT", complaints: 1692, median_value: 262750, complaints_per_1000: 459},
+                {neighbourhood: "WALKER", complaints: 1684, median_value: 427500, complaints_per_1000: 324},
+                {neighbourhood: "RUTHERFORD", complaints: 1523, median_value: 353000, complaints_per_1000: 277},
+                {neighbourhood: "SILVER BERRY", complaints: 1416, median_value: 442500, complaints_per_1000: 551},
+                {neighbourhood: "KILKENNY", complaints: 1385, median_value: 377000, complaints_per_1000: 867},
+                {neighbourhood: "KINISKI GARDENS", complaints: 1359, median_value: 383000, complaints_per_1000: 613},
+                {neighbourhood: "ALBERTA AVENUE", complaints: 1329, median_value: 268000, complaints_per_1000: 527},
+                {neighbourhood: "TWIN BROOKS", complaints: 1322, median_value: 567500, complaints_per_1000: 570}
+            ],
+            response_times: [
+                {year: 2014, mean_response: 5.8}, {year: 2015, mean_response: 5.3},
+                {year: 2016, mean_response: 2.3}, {year: 2017, mean_response: 2.2},
+                {year: 2018, mean_response: 2.6}, {year: 2019, mean_response: 4.6},
+                {year: 2020, mean_response: 7.9}, {year: 2021, mean_response: 5.8},
+                {year: 2022, mean_response: 6.2}, {year: 2023, mean_response: 4.0},
+                {year: 2024, mean_response: 4.1}, {year: 2025, mean_response: 4.5}
+            ],
+            wards: [
+                {ward: "Métis", complaints: 12507, avg_response: 5.3},
+                {ward: "papastew", complaints: 10207, avg_response: 6.1},
+                {ward: "sipiwiyiniwak", complaints: 9276, avg_response: 5.1},
+                {ward: "Anirniq", complaints: 9089, avg_response: 4.0},
+                {ward: "Nakota Isga", complaints: 8953, avg_response: 3.9},
+                {ward: "Karhiio", complaints: 8837, avg_response: 3.0},
+                {ward: "tastawiyiniwak", complaints: 8828, avg_response: 4.8},
+                {ward: "Dene", complaints: 7969, avg_response: 5.6},
+                {ward: "Sspomitapi", complaints: 7845, avg_response: 4.2},
+                {ward: "O-day'min", complaints: 7328, avg_response: 7.0}
+            ]
+        };
+
+        // Linear regression helper
+        function linearRegression(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((acc, xi, i) => acc + xi * y[i], 0);
+            const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
+            const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            return { slope, intercept };
+        }
+
+        // Base layout
+        const baseLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: colors.muted, family: 'Inter, sans-serif', size: 12 },
+            margin: { t: 30, r: 30, b: 50, l: 60 },
+            xaxis: {
+                showgrid: false,
+                zeroline: false,
+                linecolor: colors.muted,
+                tickcolor: colors.muted
+            },
+            yaxis: {
+                showgrid: false,
+                zeroline: false,
+                linecolor: colors.muted,
+                tickcolor: colors.muted
+            }
+        };
+
+        const config = { responsive: true, displayModeBar: false };
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.section).classList.add('active');
+            });
+        });
+
+        // Overview Chart
+        const years = data.yearly.map(d => d.year);
+        Plotly.newPlot('overview-chart', [
+            {
+                x: years,
+                y: data.yearly.map(d => d.complaints),
+                type: 'bar',
+                name: 'Complaints',
+                marker: { color: colors.primaryLight }
+            },
+            {
+                x: years,
+                y: data.yearly.map(d => d.snowfall_cm),
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Snowfall (cm)',
+                yaxis: 'y2',
+                line: { color: colors.accent, width: 3 },
+                marker: { size: 8, color: colors.accent }
+            }
+        ], {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis, tickmode: 'array', tickvals: years },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints', font: { color: colors.muted } } },
+            yaxis2: {
+                title: { text: 'Snowfall (cm)', font: { color: colors.muted } },
+                overlaying: 'y',
+                side: 'right',
+                showgrid: false,
+                zeroline: false
+            },
+            legend: { x: 0.5, y: 1.12, orientation: 'h', xanchor: 'center', font: { color: colors.foreground } },
+            barmode: 'group'
+        }, config);
+
+        // Complaints per CM chart
+        Plotly.newPlot('complaints-per-cm-chart', [{
+            x: years,
+            y: data.yearly.map(d => d.complaints_per_cm),
+            type: 'scatter',
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(149, 213, 178, 0.15)',
+            line: { color: colors.primaryLight, width: 3 },
+            marker: { size: 10, color: colors.primaryLight }
+        }], {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis, tickmode: 'array', tickvals: years },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints per cm of Snow', font: { color: colors.muted } } }
+        }, config);
+
+        // Budget Normalized Chart
+        const budgetData = data.yearly.filter(d => d.budget > 0);
+        const maxBudget = Math.max(...budgetData.map(d => d.budget));
+        const maxComplaints = Math.max(...budgetData.map(d => d.complaints));
+        const normalizedBudget = budgetData.map(d => d.budget / maxBudget);
+        const normalizedComplaints = budgetData.map(d => d.complaints / maxComplaints);
+
+        Plotly.newPlot('budget-normalized-chart', [
+            {
+                x: normalizedBudget,
+                y: normalizedComplaints,
+                mode: 'markers+text',
+                type: 'scatter',
+                text: budgetData.map(d => d.year),
+                textposition: 'top center',
+                textfont: { color: colors.foreground, size: 11 },
+                marker: {
+                    size: 14,
+                    color: budgetData.map(d => d.year === 2022 ? colors.negative : colors.primaryLight)
+                },
+                hovertemplate: '<b>%{text}</b><br>Budget: %{x:.2f}<br>Complaints: %{y:.2f}<extra></extra>'
+            },
+            {
+                x: [0, 1],
+                y: [0, 1],
+                mode: 'lines',
+                line: { color: colors.muted, dash: 'dash', width: 1 },
+                showlegend: false,
+                hoverinfo: 'skip'
+            }
+        ], {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis, title: { text: 'Normalized Budget (0-1)', font: { color: colors.muted } }, range: [0.7, 1.05] },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Normalized Complaints (0-1)', font: { color: colors.muted } }, range: [0.2, 1.1] },
+            annotations: [{
+                x: 0.75, y: 1.0,
+                text: '2022: Budget spike<br>after crisis',
+                showarrow: true,
+                arrowhead: 2,
+                ax: -60, ay: 30,
+                font: { color: colors.negative, size: 11 }
+            }]
+        }, config);
+
+        // Budget per capita
+        const budgetPerCapita = budgetData.map(d => ({
+            year: d.year,
+            perCapita: d.budget / d.population
+        }));
+
+        Plotly.newPlot('budget-per-capita-chart', [{
+            x: budgetPerCapita.map(d => d.year),
+            y: budgetPerCapita.map(d => d.perCapita),
+            type: 'bar',
+            marker: {
+                color: budgetPerCapita.map(d => d.perCapita < 45 ? colors.negative : colors.primaryLight)
+            },
+            text: budgetPerCapita.map(d => '$' + d.perCapita.toFixed(0)),
+            textposition: 'outside',
+            textfont: { color: colors.foreground }
+        }], {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis, tickmode: 'array', tickvals: budgetPerCapita.map(d => d.year) },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Budget per Capita ($)', font: { color: colors.muted } }, range: [0, 60] }
+        }, config);
+
+        // Monthly Chart - Fixed version
+        const winterMonths = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+        const monthlyTraces = [];
+        const yearColors = {
+            '2019-20': colors.muted,
+            '2020-21': colors.accent,
+            '2021-22': colors.negative,
+            '2022-23': colors.primaryLight,
+            '2023-24': colors.primary
+        };
+
+        // Build winter season data (Nov-Mar spans two calendar years)
+        const winterSeasons = [
+            { label: '2019-20', data: [data.monthlyByYear[2019][11], data.monthlyByYear[2019][12], data.monthlyByYear[2020][1], data.monthlyByYear[2020][2], data.monthlyByYear[2020][3]] },
+            { label: '2020-21', data: [data.monthlyByYear[2020][11], data.monthlyByYear[2020][12], data.monthlyByYear[2021][1], data.monthlyByYear[2021][2], data.monthlyByYear[2021][3]] },
+            { label: '2021-22', data: [data.monthlyByYear[2021][11], data.monthlyByYear[2021][12], data.monthlyByYear[2022][1], data.monthlyByYear[2022][2], data.monthlyByYear[2022][3]] },
+            { label: '2022-23', data: [data.monthlyByYear[2022][11], data.monthlyByYear[2022][12], data.monthlyByYear[2023][1], data.monthlyByYear[2023][2], data.monthlyByYear[2023][3]] },
+            { label: '2023-24', data: [data.monthlyByYear[2023][11], data.monthlyByYear[2023][12], data.monthlyByYear[2024][1], data.monthlyByYear[2024][2], data.monthlyByYear[2024][3]] }
+        ];
+
+        winterSeasons.forEach(season => {
+            monthlyTraces.push({
+                x: winterMonths,
+                y: season.data,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: season.label,
+                line: {
+                    width: season.label === '2021-22' ? 4 : 2,
+                    color: yearColors[season.label]
+                },
+                marker: { size: season.label === '2021-22' ? 10 : 6 }
+            });
+        });
+
+        Plotly.newPlot('monthly-chart', monthlyTraces, {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints', font: { color: colors.muted } } },
+            legend: { x: 1, y: 1, font: { color: colors.foreground } }
+        }, config);
+
+        // Crisis Timeline
+        const crisisData = [
+            { month: 'Nov 2021', complaints: 2455 },
+            { month: 'Dec 2021', complaints: 10313 },
+            { month: 'Jan 2022', complaints: 13632 },
+            { month: 'Feb 2022', complaints: 9839 },
+            { month: 'Mar 2022', complaints: 5980 },
+            { month: 'Apr 2022', complaints: 507 }
+        ];
+
+        Plotly.newPlot('crisis-timeline', [{
+            x: crisisData.map(d => d.month),
+            y: crisisData.map(d => d.complaints),
+            type: 'bar',
+            marker: {
+                color: crisisData.map(d =>
+                    d.complaints > 10000 ? colors.negative :
+                    d.complaints > 5000 ? colors.warning : colors.primaryLight
+                )
+            },
+            text: crisisData.map(d => d.complaints.toLocaleString()),
+            textposition: 'outside',
+            textfont: { color: colors.foreground }
+        }], {
+            ...baseLayout,
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints', font: { color: colors.muted } }, range: [0, 16000] },
+            annotations: [{
+                x: 'Jan 2022', y: 13632,
+                text: 'PEAK',
+                showarrow: true,
+                arrowhead: 2,
+                ax: 0, ay: -35,
+                font: { color: colors.negative, size: 13, weight: 'bold' }
+            }]
+        }, config);
+
+        // Neighborhood Chart
+        const top15 = data.neighborhoods.slice(0, 15);
+        Plotly.newPlot('neighborhood-chart', [{
+            y: top15.map(d => d.neighbourhood),
+            x: top15.map(d => d.complaints),
+            type: 'bar',
+            orientation: 'h',
+            marker: {
+                color: top15.map((d, i) => {
+                    const alpha = 1 - (i * 0.05);
+                    return `rgba(149, 213, 178, ${alpha})`;
+                })
+            },
+            text: top15.map(d => d.complaints.toLocaleString()),
+            textposition: 'outside',
+            textfont: { color: colors.foreground, size: 11 }
+        }], {
+            ...baseLayout,
+            margin: { ...baseLayout.margin, l: 130, r: 60 },
+            xaxis: { ...baseLayout.xaxis, title: { text: 'Total Complaints (2014-2025)', font: { color: colors.muted } } },
+            yaxis: { ...baseLayout.yaxis, autorange: 'reversed' }
+        }, config);
+
+        // Scatter Chart with Trendline
+        const xValues = data.neighborhoods.map(d => d.median_value / 1000);
+        const yValues = data.neighborhoods.map(d => d.complaints_per_1000);
+        const regression = linearRegression(xValues, yValues);
+        const xMin = Math.min(...xValues);
+        const xMax = Math.max(...xValues);
+        const trendlineY = [regression.intercept + regression.slope * xMin, regression.intercept + regression.slope * xMax];
+
+        Plotly.newPlot('scatter-chart', [
+            {
+                x: xValues,
+                y: yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: data.neighborhoods.map(d => d.neighbourhood),
+                marker: {
+                    size: data.neighborhoods.map(d => Math.sqrt(d.complaints) / 2.5),
+                    color: colors.primaryLight,
+                    opacity: 0.7
+                },
+                hovertemplate: '<b>%{text}</b><br>Home Value: $%{x}k<br>Complaints/1000: %{y}<extra></extra>'
+            },
+            {
+                x: [xMin, xMax],
+                y: trendlineY,
+                mode: 'lines',
+                type: 'scatter',
+                name: 'Trend',
+                line: { color: colors.accent, width: 2, dash: 'dash' },
+                hoverinfo: 'skip'
+            }
+        ], {
+            ...baseLayout,
+            xaxis: {
+                ...baseLayout.xaxis,
+                type: 'linear',
+                title: { text: 'Median Home Value ($thousands)', font: { color: colors.muted } },
+                tickformat: '$,.0f',
+                dtick: 100
+            },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Complaints per 1,000 Properties', font: { color: colors.muted } } },
+            showlegend: false,
+            annotations: [{
+                x: 450, y: 750,
+                text: 'r = 0.41',
+                showarrow: false,
+                font: { color: colors.accent, size: 14 }
+            }]
+        }, config);
+
+        // Response Time Chart
+        const responseYears = data.response_times.map(d => d.year);
+        Plotly.newPlot('response-chart', [
+            {
+                x: responseYears,
+                y: data.response_times.map(d => d.mean_response),
+                type: 'scatter',
+                mode: 'lines+markers',
+                fill: 'tozeroy',
+                fillcolor: 'rgba(149, 213, 178, 0.1)',
+                line: { color: colors.primaryLight, width: 3 },
+                marker: {
+                    size: 10,
+                    color: data.response_times.map(d => d.mean_response > 6 ? colors.negative : colors.primaryLight)
+                }
+            }
+        ], {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: colors.muted, family: 'Inter, sans-serif', size: 12 },
+            margin: { t: 30, r: 30, b: 50, l: 60 },
+            xaxis: {
+                type: 'linear',
+                showgrid: false,
+                zeroline: false,
+                linecolor: colors.muted,
+                tickcolor: colors.muted,
+                tickmode: 'array',
+                tickvals: responseYears,
+                ticktext: responseYears.map(y => String(y)),
+                range: [2013.5, 2025.5]
+            },
+            yaxis: {
+                showgrid: false,
+                zeroline: false,
+                linecolor: colors.muted,
+                tickcolor: colors.muted,
+                title: { text: 'Average Response Time (Days)', font: { color: colors.muted } }
+            },
+            shapes: [{
+                type: 'line',
+                x0: 2014, x1: 2025,
+                y0: 2.2, y1: 2.2,
+                line: { color: colors.accent, width: 1, dash: 'dot' }
+            }],
+            annotations: [{
+                x: 2020, y: 7.9,
+                text: 'Budget cuts impact',
+                showarrow: true,
+                arrowhead: 2,
+                ax: 50, ay: -25,
+                font: { color: colors.negative, size: 11 }
+            }, {
+                x: 2025, y: 2.2,
+                text: '2017 baseline',
+                showarrow: false,
+                xanchor: 'right',
+                font: { color: colors.accent, size: 10 }
+            }]
+        }, config);
+
+        // Ward Chart
+        Plotly.newPlot('ward-chart', [{
+            x: data.wards.map(d => d.ward),
+            y: data.wards.map(d => d.avg_response),
+            type: 'bar',
+            marker: {
+                color: data.wards.map(d => d.avg_response > 5.5 ? colors.negative : colors.primaryLight)
+            },
+            text: data.wards.map(d => d.avg_response.toFixed(1) + 'd'),
+            textposition: 'outside',
+            textfont: { color: colors.foreground, size: 10 }
+        }], {
+            ...baseLayout,
+            xaxis: { ...baseLayout.xaxis, tickangle: -45 },
+            yaxis: { ...baseLayout.yaxis, title: { text: 'Avg Response Time (Days)', font: { color: colors.muted } }, range: [0, 8] }
+        }, config);
+    </script>
+</body>
+</html>
