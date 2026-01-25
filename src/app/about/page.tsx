@@ -7,34 +7,14 @@ export default function About() {
 
       <div className="space-y-6 text-foreground/80 leading-relaxed">
         <p>
-          Hi, I&apos;m Jordan. I&apos;m a data professional passionate about turning
-          complex datasets into clear, actionable insights.
+          Nice to meet you, I&apos;m Jordan. I&apos;m passionate about data science and
+          people analytics. I live to find insights in data that can drive meaningful
+          and impactful change.
         </p>
-
-        <p>
-          With experience spanning data engineering, analytics, and business intelligence,
-          I help organizations make better decisions through data. Whether it&apos;s building
-          scalable data pipelines, creating interactive dashboards, or uncovering patterns
-          in messy datasets — I love the challenge.
-        </p>
-
-        <h2 className="text-xl font-heading font-semibold uppercase tracking-wide text-primary-light pt-4">what I do</h2>
-        <ul className="list-none space-y-3">
-          {[
-            "Data Engineering — ETL pipelines, data modeling, cloud infrastructure",
-            "Analytics & BI — dashboards, reporting, statistical analysis",
-            "Consulting — helping teams build data-driven cultures",
-          ].map((item) => (
-            <li key={item} className="flex items-start gap-3">
-              <span className="text-primary-light mt-1">&#x2022;</span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
 
         <h2 className="text-xl font-heading font-semibold uppercase tracking-wide text-primary-light pt-4">tools & technologies</h2>
         <div className="flex flex-wrap gap-2">
-          {["Python", "SQL", "Spark", "Azure", "Power BI", "React", "TypeScript", "Git"].map(
+          {["Python", "SQL", "Azure", "Power BI", "Tableau", "React", "Git", "AI", "LLMs", "UKG", "Workday", "Greenhouse", "Oracle"].map(
             (tool) => (
               <span
                 key={tool}
