@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -20,8 +21,9 @@ export default function Navigation() {
   return (
     <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-md z-50 border-b border-surface-hover">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-primary-light font-heading font-bold text-lg tracking-wide no-underline hover:text-accent">
-          amoredatus
+        <Link href="/" className="flex items-center gap-2 no-underline hover:opacity-80 transition-opacity">
+          <Image src="/logo.png" alt="amoredatus logo" width={32} height={32} className="rounded-full" />
+          <span className="text-primary-light font-heading font-bold text-lg tracking-wide">amoredatus</span>
         </Link>
 
         {/* Desktop nav */}

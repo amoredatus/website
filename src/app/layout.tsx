@@ -18,7 +18,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "amoredatus | lovedata",
-  description: "Data analytics, engineering, and consulting — amoredatus",
+  description: "A passion project to tell data stories and share insights",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
