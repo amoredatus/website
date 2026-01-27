@@ -9,6 +9,14 @@ const projects = [
     href: "/projects/edmonton-snow-crisis.html",
     featured: true,
   },
+  {
+    title: "Decoding Spotify Track Popularity",
+    description:
+      "What makes a hit? Analyzing 32,000+ Spotify tracks to uncover how audio features, genres, and duration influence streaming success. Includes regression modeling and cluster analysis.",
+    tags: ["Python", "scikit-learn", "statsmodels", "Machine Learning"],
+    href: "/projects/spotify-popularity.html",
+    featured: true,
+  },
 ];
 
 export default function Portfolio() {
