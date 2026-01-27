@@ -830,16 +830,18 @@
         }, config);
 
         // Genre Pie Chart
+        const pieColors = data.genres.map(g => genreColors[g === 'r&b' ? 'r&b' : g]);
         Plotly.newPlot('genre-pie', [{
             values: data.genreCounts,
             labels: data.genres.map(g => g.toUpperCase()),
             type: 'pie',
             marker: {
-                colors: data.genres.map(g => genreColors[g === 'r&b' ? 'r&b' : g])
+                colors: pieColors
             },
             textinfo: 'label+percent',
             textfont: { color: colors.background, size: 12 },
-            hovertemplate: '%{label}<br>%{value:,} tracks<br>%{percent}<extra></extra>'
+            hovertemplate: '%{label}<br>%{value:,} tracks<br>%{percent}<extra></extra>',
+            pull: Array(6).fill(0)
         }], {
             ...baseLayout,
             showlegend: false,
@@ -848,13 +850,14 @@
 
         // Genre Popularity Bar
         const sortedIndices = data.genrePopularity.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]).map(x => x[1]);
+        const barColors = sortedIndices.map(i => genreColors[data.genres[i] === 'r&b' ? 'r&b' : data.genres[i]]);
         Plotly.newPlot('genre-popularity-bar', [{
             x: sortedIndices.map(i => data.genrePopularity[i]),
             y: sortedIndices.map(i => data.genres[i].toUpperCase()),
             type: 'bar',
             orientation: 'h',
             marker: {
-                color: sortedIndices.map(i => genreColors[data.genres[i] === 'r&b' ? 'r&b' : data.genres[i]])
+                color: barColors
             },
             text: sortedIndices.map(i => data.genrePopularity[i].toFixed(1)),
             textposition: 'outside',
@@ -866,6 +869,60 @@
             yaxis: { ...baseLayout.yaxis, automargin: true },
             margin: { t: 20, r: 60, b: 50, l: 80 }
         }, config);
+
+        // Overview highlight functions
+        function highlightOverviewGenre(genreLabel) {
+            const genreLower = genreLabel.toLowerCase();
+            const pieIndex = data.genres.indexOf(genreLower);
+            const barIndex = sortedIndices.indexOf(data.genres.indexOf(genreLower));
+
+            // Update pie - pull out highlighted slice, dim others
+            const pullValues = data.genres.map((_, i) => i === pieIndex ? 0.1 : 0);
+            const pieColorUpdate = pieColors.map((c, i) => i === pieIndex ? c : c + '40');
+            Plotly.restyle('genre-pie', {
+                'pull': [pullValues],
+                'marker.colors': [pieColorUpdate]
+            });
+
+            // Update bar - highlight matching bar, dim others
+            const barColorUpdate = barColors.map((c, i) => {
+                const originalGenreIndex = sortedIndices[i];
+                return originalGenreIndex === pieIndex ? c : c + '40';
+            });
+            Plotly.restyle('genre-popularity-bar', {
+                'marker.color': [barColorUpdate]
+            });
+        }
+
+        function resetOverviewHighlight() {
+            Plotly.restyle('genre-pie', {
+                'pull': [Array(6).fill(0)],
+                'marker.colors': [pieColors]
+            });
+            Plotly.restyle('genre-popularity-bar', {
+                'marker.color': [barColors]
+            });
+        }
+
+        // Add hover events for pie chart
+        document.getElementById('genre-pie').on('plotly_hover', function(eventData) {
+            const label = eventData.points[0].label;
+            highlightOverviewGenre(label);
+        });
+
+        document.getElementById('genre-pie').on('plotly_unhover', function() {
+            resetOverviewHighlight();
+        });
+
+        // Add hover events for bar chart
+        document.getElementById('genre-popularity-bar').on('plotly_hover', function(eventData) {
+            const label = eventData.points[0].y;
+            highlightOverviewGenre(label);
+        });
+
+        document.getElementById('genre-popularity-bar').on('plotly_unhover', function() {
+            resetOverviewHighlight();
+        });
 
         // Correlation Bar Chart
         const corrColors = data.correlations.map(c => c >= 0 ? colors.primary : colors.pop);
