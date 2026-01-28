@@ -1107,7 +1107,7 @@
             hovertemplate: '%{y}<br>%{x} tracks<extra></extra>'
         }], {
             ...baseLayout,
-            xaxis: { ...baseLayout.xaxis, title: { text: 'Number of Tracks', font: { color: colors.muted } }, range: [0, 190] },
+            xaxis: { ...baseLayout.xaxis, title: { text: 'Number of Tracks', font: { color: colors.muted } }, range: [0, 190], type: 'linear', autorange: false, showticklabels: false },
             yaxis: { ...baseLayout.yaxis, automargin: true, autorange: 'reversed' },
             margin: { t: 20, r: 60, b: 50, l: 180 }
         }, config);
