@@ -9,7 +9,6 @@ const navLinks = [
   { href: "/", label: "home" },
   { href: "/about", label: "about" },
   { href: "/portfolio", label: "portfolio" },
-  { href: "https://nbviewer.org/github/amoredatus/website/blob/main/public/projects/spotify-analysis.ipynb", label: "notebook", external: true },
   { href: "/blog", label: "blog" },
   { href: "/contact", label: "contact" },
   { href: "https://github.com/amoredatus", label: "github", external: true },
