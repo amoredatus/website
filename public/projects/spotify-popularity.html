@@ -175,7 +175,7 @@
 
         .stat-card.highlighted {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(45, 106, 79, 0.3);
+            box-shadow: 0 0 20px rgba(149, 213, 178, 0.5), 0 0 40px rgba(45, 106, 79, 0.3);
         }
 
         .stat-card.dimmed {
@@ -342,7 +342,7 @@
 
         .genre-card.highlighted {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(45, 106, 79, 0.3);
+            box-shadow: 0 0 20px rgba(149, 213, 178, 0.5), 0 0 40px rgba(45, 106, 79, 0.3);
         }
 
         .genre-card.dimmed {
@@ -615,17 +615,17 @@
                 <div class="genre-charts-left">
                     <div class="chart-container">
                         <h3 class="chart-title">Genre Audio Fingerprints</h3>
-                        <div id="radar-chart" class="chart-div" style="height: 320px;"></div>
+                        <div id="radar-chart" class="chart-div" style="height: 200px;"></div>
                     </div>
                     <div class="chart-container">
                         <h3 class="chart-title">Energy vs Danceability</h3>
-                        <div id="scatter-energy-dance" class="chart-div" style="height: 320px;"></div>
+                        <div id="scatter-energy-dance" class="chart-div" style="height: 200px;"></div>
                     </div>
                 </div>
                 <div class="genre-charts-right">
                     <div class="chart-container">
                         <h3 class="chart-title">Tempo Distribution</h3>
-                        <div id="tempo-violin" class="chart-div" style="height: 664px;"></div>
+                        <div id="tempo-violin" class="chart-div" style="height: 448px;"></div>
                     </div>
                 </div>
             </div>
@@ -786,17 +786,19 @@
                 }
             });
 
-            // Update radar chart
-            const radarUpdate = genreOrder.map(g => g === genre ? 1 : 0.15);
-            const radarLineUpdate = genreOrder.map(g => g === genre ? 3 : 1);
-            Plotly.restyle('radar-chart', { 'opacity': radarUpdate, 'line.width': radarLineUpdate });
+            // Update radar chart with glow effect
+            const radarUpdate = genreOrder.map(g => g === genre ? 1 : 0.1);
+            const radarLineUpdate = genreOrder.map(g => g === genre ? 4 : 1);
+            const radarFillUpdate = genreOrder.map(g => g === genre ? genreColors[g] + '55' : genreColors[g] + '15');
+            Plotly.restyle('radar-chart', { 'opacity': radarUpdate, 'line.width': radarLineUpdate, 'fillcolor': radarFillUpdate });
 
-            // Update scatter plot
-            const scatterUpdate = genreOrder.map(g => g === genre ? 1 : 0.2);
-            Plotly.restyle('scatter-energy-dance', { 'marker.opacity': scatterUpdate });
+            // Update scatter plot with size boost
+            const scatterOpacity = genreOrder.map(g => g === genre ? 1 : 0.15);
+            const scatterSize = genreOrder.map(g => g === genre ? 50 : 30);
+            Plotly.restyle('scatter-energy-dance', { 'marker.opacity': scatterOpacity, 'marker.size': scatterSize });
 
             // Update violin plot
-            const violinUpdate = genreOrder.map(g => g === genre ? 1 : 0.2);
+            const violinUpdate = genreOrder.map(g => g === genre ? 1 : 0.15);
             Plotly.restyle('tempo-violin', { 'opacity': violinUpdate });
         }
 
@@ -805,8 +807,9 @@
                 card.classList.remove('highlighted', 'dimmed');
             });
 
-            Plotly.restyle('radar-chart', { 'opacity': 1, 'line.width': 2 });
-            Plotly.restyle('scatter-energy-dance', { 'marker.opacity': 0.8 });
+            const defaultFills = genreOrder.map(g => genreColors[g] + '33');
+            Plotly.restyle('radar-chart', { 'opacity': 1, 'line.width': 2, 'fillcolor': defaultFills });
+            Plotly.restyle('scatter-energy-dance', { 'marker.opacity': 0.8, 'marker.size': 40 });
             Plotly.restyle('tempo-violin', { 'opacity': 1 });
         }
 
@@ -994,12 +997,12 @@
         Plotly.newPlot('radar-chart', radarTraces, {
             ...baseLayout,
             polar: {
-                radialaxis: { visible: true, range: [0, 1], gridcolor: 'rgba(255,255,255,0.1)', linecolor: 'rgba(255,255,255,0.1)' },
-                angularaxis: { gridcolor: 'rgba(255,255,255,0.1)', linecolor: 'rgba(255,255,255,0.1)' },
+                radialaxis: { visible: true, range: [0, 1], showticklabels: false, gridcolor: 'rgba(255,255,255,0.1)', linecolor: 'rgba(255,255,255,0.1)' },
+                angularaxis: { gridcolor: 'rgba(255,255,255,0.1)', linecolor: 'rgba(255,255,255,0.1)', tickfont: { size: 11, color: colors.muted } },
                 bgcolor: 'rgba(0,0,0,0)'
             },
             showlegend: false,
-            margin: { t: 10, r: 10, b: 10, l: 10 }
+            margin: { t: 30, r: 50, b: 30, l: 50 }
         }, config);
 
         // Add hover events for radar
