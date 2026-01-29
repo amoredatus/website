@@ -175,15 +175,33 @@
 
         .stat-cards {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
             margin-bottom: 36px;
             width: 100%;
             box-sizing: border-box;
         }
 
-        @media (max-width: 600px) {
+        .stat-cards.centered-3 {
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 900px) {
             .stat-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stat-cards.centered-3 {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stat-cards,
+            .stat-cards.centered-3 {
                 grid-template-columns: 1fr;
             }
         }
@@ -608,7 +626,7 @@
             <p>January 2022 wasn't just bad—it was catastrophic. In a single month, Edmonton received more snow complaints than the entire year of 2016. The 311 system was overwhelmed, response times stretched to breaking point, and residents took to social media to document impassable streets.</p>
         </div>
 
-        <div class="stat-cards">
+        <div class="stat-cards centered-3">
             <div class="stat-card negative">
                 <div class="value">13,632</div>
                 <div class="label">Complaints in January 2022</div>
@@ -647,7 +665,7 @@
             <p>Not all neighborhoods experience snow clearing equally. Our analysis reveals patterns: some areas consistently file more complaints, and there's a measurable correlation between property values and complaint rates.</p>
         </div>
 
-        <div class="stat-cards">
+        <div class="stat-cards centered-3">
             <div class="stat-card">
                 <div class="value">0.41</div>
                 <div class="label">Correlation: Home Value ↔ Complaints</div>
@@ -692,7 +710,7 @@
             <p>How long does it take the city to address a snow complaint? The answer has varied dramatically—and tells another story of declining service. Response times peaked during the budget cut years and have never fully recovered.</p>
         </div>
 
-        <div class="stat-cards">
+        <div class="stat-cards centered-3">
             <div class="stat-card">
                 <div class="value">2.2 days</div>
                 <div class="label">Best Response (2017)</div>
@@ -1223,12 +1241,13 @@
                 })
             },
             text: top15.map(d => (d.complaints / 1000).toFixed(1) + 'k'),
-            textposition: 'outside',
-            textfont: { color: colors.foreground, size: 10 },
+            textposition: 'inside',
+            textfont: { color: '#0f0f0f', size: 10 },
+            insidetextanchor: 'end',
             hovertemplate: '<b>%{y}</b><br>%{x:,} complaints<extra></extra>'
         }], {
             ...baseLayout,
-            margin: { ...baseLayout.margin, l: 110, r: 50, t: 10 },
+            margin: { ...baseLayout.margin, l: 95, r: 55, t: 10, b: 20 },
             xaxis: { ...baseLayout.xaxis, showticklabels: false, range: [0, Math.max(...top15.map(d => d.complaints)) * 1.15], type: 'linear', autorange: false },
             yaxis: { ...baseLayout.yaxis, autorange: 'reversed', tickfont: { size: 10 } }
         }, config);
@@ -1299,9 +1318,9 @@
                     autosize: true
                 }, { ...config, responsive: true });
 
-                // Force resize to fill container
+                // Force resize by dispatching window resize event (mimics opening dev tools)
                 setTimeout(() => {
-                    Plotly.Plots.resize('neighborhood-map');
+                    window.dispatchEvent(new Event('resize'));
                 }, 100);
 
                 // Add hover interactivity between bar chart and map
