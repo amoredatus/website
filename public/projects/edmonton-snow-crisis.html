@@ -134,6 +134,7 @@
             max-width: 1100px;
             margin: 0 auto;
             animation: fadeIn 0.4s ease;
+            overflow: hidden;
         }
 
         .section.active {
@@ -159,6 +160,8 @@
             border-radius: 8px;
             margin-bottom: 32px;
             border-left: 3px solid var(--primary);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .narrative p {
@@ -172,9 +175,17 @@
 
         .stat-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 36px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 600px) {
+            .stat-cards {
+                grid-template-columns: 1fr;
+            }
         }
 
         .stat-card {
@@ -183,6 +194,8 @@
             border-radius: 8px;
             text-align: center;
             border: 1px solid var(--surface-hover);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .stat-card .value {
@@ -366,6 +379,18 @@
             height: 400px;
         }
 
+        #neighborhood-map {
+            height: 500px !important;
+            min-height: 500px;
+        }
+
+        #neighborhood-map .js-plotly-plot,
+        #neighborhood-map .plot-container,
+        #neighborhood-map .svg-container {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
         .chart-container {
             background: var(--surface);
             border-radius: 8px;
@@ -373,6 +398,37 @@
             margin-bottom: 32px;
             border: 1px solid var(--surface-hover);
             width: 100%;
+        }
+
+        .chart-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            width: 100%;
+        }
+
+        .chart-row .chart-container {
+            margin-bottom: 0;
+        }
+
+        .chart-row .chart-container.narrow {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chart-row .chart-container.wide {
+            flex: 3;
+            min-width: 0;
+        }
+
+        @media (max-width: 900px) {
+            .chart-row {
+                flex-direction: column;
+            }
+            .chart-row .chart-container.narrow,
+            .chart-row .chart-container.wide {
+                flex: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -606,9 +662,15 @@
             </div>
         </div>
 
-        <div class="chart-container">
-            <h3 class="chart-title">Top 15 Neighborhoods by Complaint Volume</h3>
-            <div id="neighborhood-chart" class="chart-wrapper" style="height: 500px;"></div>
+        <div class="chart-row">
+            <div class="chart-container narrow">
+                <h3 class="chart-title">Top 15 Neighborhoods by Volume</h3>
+                <div id="neighborhood-chart" class="chart-wrapper" style="height: 500px;"></div>
+            </div>
+            <div class="chart-container wide">
+                <h3 class="chart-title">Neighborhood Complaint Density</h3>
+                <div id="neighborhood-map" class="chart-wrapper" style="height: 500px; width: 100%;"></div>
+            </div>
         </div>
 
         <div class="chart-container">
@@ -1160,15 +1222,136 @@
                     return `rgba(149, 213, 178, ${alpha})`;
                 })
             },
-            text: top15.map(d => d.complaints.toLocaleString()),
+            text: top15.map(d => (d.complaints / 1000).toFixed(1) + 'k'),
             textposition: 'outside',
-            textfont: { color: colors.foreground, size: 11 }
+            textfont: { color: colors.foreground, size: 10 },
+            hovertemplate: '<b>%{y}</b><br>%{x:,} complaints<extra></extra>'
         }], {
             ...baseLayout,
-            margin: { ...baseLayout.margin, l: 130, r: 60 },
-            xaxis: { ...baseLayout.xaxis, title: { text: 'Total Complaints (2014-2025)', font: { color: colors.muted } } },
-            yaxis: { ...baseLayout.yaxis, autorange: 'reversed' }
+            margin: { ...baseLayout.margin, l: 110, r: 50, t: 10 },
+            xaxis: { ...baseLayout.xaxis, showticklabels: false, range: [0, Math.max(...top15.map(d => d.complaints)) * 1.15], type: 'linear', autorange: false },
+            yaxis: { ...baseLayout.yaxis, autorange: 'reversed', tickfont: { size: 10 } }
         }, config);
+
+        // Neighborhood Choropleth Map
+        console.log('MAP VERSION: v4 - zoom 11');
+        fetch('https://data.edmonton.ca/resource/65fr-66s6.geojson')
+            .then(response => response.json())
+            .then(geojson => {
+                // Create a lookup for complaints by neighborhood name
+                const complaintLookup = {};
+                data.neighborhoods.forEach(d => {
+                    complaintLookup[d.neighbourhood] = d.complaints;
+                });
+
+                // Filter features to only include neighborhoods with data and add complaint counts
+                const featuresWithData = geojson.features.filter(f => {
+                    const name = f.properties.name;
+                    return complaintLookup[name] !== undefined;
+                });
+
+                // Get all neighborhoods for the map (including those without complaint data)
+                const locations = featuresWithData.map(f => f.properties.name);
+                const complaints = featuresWithData.map(f => complaintLookup[f.properties.name] || 0);
+                const maxComplaints = Math.max(...data.neighborhoods.map(d => d.complaints));
+
+                Plotly.newPlot('neighborhood-map', [{
+                    type: 'choroplethmapbox',
+                    geojson: geojson,
+                    featureidkey: 'properties.name',
+                    locations: locations,
+                    z: complaints,
+                    colorscale: [
+                        [0, 'rgba(45, 106, 79, 0.2)'],
+                        [0.25, 'rgba(45, 106, 79, 0.4)'],
+                        [0.5, 'rgba(95, 156, 129, 0.6)'],
+                        [0.75, 'rgba(149, 213, 178, 0.8)'],
+                        [1, 'rgba(183, 228, 199, 1)']
+                    ],
+                    zmin: 0,
+                    zmax: maxComplaints,
+                    marker: { opacity: 0.8, line: { width: 0.5, color: 'rgba(255,255,255,0.3)' } },
+                    hovertemplate: '<b>%{location}</b><br>Complaints: %{z:,}<extra></extra>',
+                    colorbar: {
+                        title: { text: 'Complaints', font: { color: colors.muted, size: 10 } },
+                        tickfont: { color: colors.muted, size: 9 },
+                        bgcolor: 'rgba(0,0,0,0)',
+                        borderwidth: 0,
+                        len: 0.5,
+                        thickness: 10,
+                        x: 1.02,
+                        xanchor: 'left',
+                        y: 0.5,
+                        yanchor: 'middle',
+                        tickvals: [0, 1000, 2000, 3000, 4000, 5000],
+                        ticktext: ['0', '1k', '2k', '3k', '4k', '5k']
+                    }
+                }], {
+                    mapbox: {
+                        style: 'carto-darkmatter',
+                        center: { lat: 53.52, lon: -113.5 },
+                        zoom: 11
+                    },
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    margin: { t: 0, r: 50, b: 0, l: 0 },
+                    showlegend: false,
+                    autosize: true
+                }, { ...config, responsive: true });
+
+                // Force resize to fill container
+                setTimeout(() => {
+                    Plotly.Plots.resize('neighborhood-map');
+                }, 100);
+
+                // Add hover interactivity between bar chart and map
+                const neighborhoodChart = document.getElementById('neighborhood-chart');
+                const neighborhoodMap = document.getElementById('neighborhood-map');
+
+                // When hovering on bar chart, highlight on map
+                neighborhoodChart.on('plotly_hover', function(eventData) {
+                    const neighborhood = eventData.points[0].y;
+                    const idx = locations.indexOf(neighborhood);
+                    if (idx !== -1) {
+                        Plotly.restyle('neighborhood-map', {
+                            'marker.opacity': [locations.map((loc, i) => loc === neighborhood ? 1 : 0.3)]
+                        });
+                    }
+                });
+
+                neighborhoodChart.on('plotly_unhover', function() {
+                    Plotly.restyle('neighborhood-map', {
+                        'marker.opacity': [locations.map(() => 0.8)]
+                    });
+                });
+
+                // When hovering on map, highlight on bar chart
+                neighborhoodMap.on('plotly_hover', function(eventData) {
+                    const neighborhood = eventData.points[0].location;
+                    const barIdx = top15.findIndex(d => d.neighbourhood === neighborhood);
+                    if (barIdx !== -1) {
+                        const newColors = top15.map((d, i) => {
+                            if (d.neighbourhood === neighborhood) {
+                                return 'rgba(183, 228, 199, 1)';
+                            }
+                            return `rgba(149, 213, 178, ${0.3})`;
+                        });
+                        Plotly.restyle('neighborhood-chart', { 'marker.color': [newColors] });
+                    }
+                });
+
+                neighborhoodMap.on('plotly_unhover', function() {
+                    const defaultColors = top15.map((d, i) => {
+                        const alpha = 1 - (i * 0.05);
+                        return `rgba(149, 213, 178, ${alpha})`;
+                    });
+                    Plotly.restyle('neighborhood-chart', { 'marker.color': [defaultColors] });
+                });
+            })
+            .catch(err => {
+                console.error('Error loading neighborhood GeoJSON:', err);
+                document.getElementById('neighborhood-map').innerHTML = '<p style="color: var(--muted); text-align: center; padding: 50px;">Map data unavailable</p>';
+            });
 
         // Scatter Chart with Trendline
         const xValues = data.neighborhoods.map(d => d.median_value / 1000);
