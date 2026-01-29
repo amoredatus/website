@@ -36,9 +36,41 @@
             line-height: 1.6;
         }
 
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--background)/80;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--surface-hover);
+            padding: 12px 24px;
+        }
+
+        .site-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .site-nav a:hover {
+            color: var(--primary-light);
+        }
+
+        .site-nav .logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
         .hero {
             text-align: center;
-            padding: 80px 20px 60px;
+            padding: 120px 20px 60px;
             background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
             border-bottom: 1px solid var(--surface-hover);
         }
@@ -469,6 +501,13 @@
     </style>
 </head>
 <body>
+    <nav class="site-nav">
+        <a href="https://amoredatus.com">
+            <img src="/logo.png" alt="amoredatus" class="logo">
+            <span>← back to amoredatus</span>
+        </a>
+    </nav>
+
     <div class="hero">
         <h1>Decoding Spotify Track Popularity</h1>
         <p class="subtitle">What makes a hit? Analyzing 32,000+ tracks to uncover the audio features, genres, and patterns that drive streaming success.</p>

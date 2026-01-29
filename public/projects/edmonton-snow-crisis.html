@@ -40,9 +40,41 @@
             letter-spacing: 0.02em;
         }
 
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--surface-hover);
+            padding: 12px 24px;
+        }
+
+        .site-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .site-nav a:hover {
+            color: var(--primary-light);
+        }
+
+        .site-nav .logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
         .header {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 100px 20px 40px;
             background: linear-gradient(180deg, rgba(45,106,79,0.15) 0%, transparent 100%);
         }
 
@@ -356,6 +388,13 @@
     </style>
 </head>
 <body>
+    <nav class="site-nav">
+        <a href="https://amoredatus.com">
+            <img src="/logo.png" alt="amoredatus" class="logo">
+            <span>← back to amoredatus</span>
+        </a>
+    </nav>
+
     <header class="header">
         <h1>Edmonton's Snow Clearing Crisis</h1>
         <p class="subtitle">When Budgets Freeze but Complaints Melt Records: A Data Story About Winter in Edmonton</p>
