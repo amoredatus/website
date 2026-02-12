@@ -1,0 +1,13 @@
+level,organization_code,report_category,status_code,status,organization
+2,10,Department,A,Active,Operations
+2,20,Department,A,Active,Service
+2,30,Department,A,Active,Sales
+2,40,Department,A,Active,Parts
+2,50,Department,A,Active,Finance & Accounting
+2,60,Department,A,Active,Human Resources
+2,70,Department,A,Active,Information Technology
+2,80,Department,A,Active,Marketing
+2,90,Department,A,Active,Legal & Compliance
+2,100,Department,A,Active,Supply Chain
+2,110,Department,A,Active,Quality Assurance
+2,120,Department,A,Active,Health & Safety

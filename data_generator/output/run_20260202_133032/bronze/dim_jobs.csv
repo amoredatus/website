@@ -1,0 +1,98 @@
+job_code,job_family_code,job,job_level,is_supervisor,is_staff,noc_group,work_environment_code
+01ADM1,ADMIN,Administrative Assistant,entry,False,False,,F
+02ADM2,ADMIN,Administrative Coordinator,intermediate,False,False,,F
+03ADM3,ADMIN,Senior Administrative Coordinator,senior,False,True,,F
+04ADM4,ADMIN,Executive Assistant,lead,True,True,,F
+05ACC1,ACCTG,Accounts Payable Clerk,entry,False,False,,F
+06ACC1,ACCTG,Accounts Receivable Clerk,entry,False,False,,F
+07ACC2,ACCTG,Accountant,intermediate,False,False,,F
+08ACC3,ACCTG,Senior Accountant,senior,False,True,,F
+09ACC4,ACCTG,Accounting Lead,lead,True,True,,F
+10ACC5,ACCTG,Accounting Manager,manager,True,True,,O
+11ACC6,ACCTG,Controller,director,True,True,,O
+12ACC7,ACCTG,Chief Financial Officer,executive,True,True,,O
+13CSR1,CSR,Customer Service Representative,entry,False,False,,F
+14CSR2,CSR,Customer Service Specialist,intermediate,False,False,,F
+15CSR3,CSR,Senior Customer Service Specialist,senior,False,True,,F
+16CSR4,CSR,Customer Service Team Lead,lead,True,True,,F
+17CSR5,CSR,Customer Service Manager,manager,True,True,,O
+18ENG1,ENGR,Junior Engineer,entry,False,False,,F
+19ENG2,ENGR,Engineer,intermediate,False,False,,F
+20ENG3,ENGR,Senior Engineer,senior,False,True,,F
+21ENG4,ENGR,Principal Engineer,lead,True,True,,F
+22ENG5,ENGR,Engineering Manager,manager,True,True,,O
+23ENG6,ENGR,Director of Engineering,director,True,True,,O
+24ENG7,ENGR,VP of Engineering,executive,True,True,,O
+25HR1,HR,HR Coordinator,entry,False,False,,F
+26HR2,HR,HR Generalist,intermediate,False,False,,F
+27HR3,HR,Senior HR Generalist,senior,False,True,,F
+28HR4,HR,HR Business Partner,lead,True,True,,F
+29HR5,HR,HR Manager,manager,True,True,,O
+30HR6,HR,Director of Human Resources,director,True,True,,O
+31HR7,HR,Chief People Officer,executive,True,True,,O
+32IT1,IT,IT Support Technician,entry,False,False,,F
+33IT2,IT,Systems Administrator,intermediate,False,False,,F
+34IT2,IT,Software Developer,intermediate,False,False,,F
+35IT3,IT,Senior Developer,senior,False,True,,F
+36IT3,IT,Senior Systems Administrator,senior,False,True,,F
+37IT4,IT,Technical Lead,lead,True,True,,F
+38IT5,IT,IT Manager,manager,True,True,,O
+39IT6,IT,Director of IT,director,True,True,,O
+40IT7,IT,Chief Information Officer,executive,True,True,,O
+41SAL1,SALES,Sales Representative,entry,False,False,,F
+42SAL2,SALES,Account Executive,intermediate,False,False,,F
+43SAL3,SALES,Senior Account Executive,senior,False,True,,F
+44SAL4,SALES,Sales Team Lead,lead,True,True,,F
+45SAL5,SALES,Sales Manager,manager,True,True,,O
+46SAL6,SALES,Director of Sales,director,True,True,,O
+47SAL7,SALES,VP of Sales,executive,True,True,,O
+48OPS1,OPS,Operations Assistant,entry,False,False,,F
+49OPS2,OPS,Operations Coordinator,intermediate,False,False,,F
+50OPS3,OPS,Operations Specialist,senior,False,True,,F
+51OPS4,OPS,Operations Lead,lead,True,True,,F
+52OPS5,OPS,Operations Manager,manager,True,True,,O
+53OPS6,OPS,Director of Operations,director,True,True,,O
+54OPS7,OPS,Chief Operating Officer,executive,True,True,,O
+55TRD1,TRD,Apprentice Technician,entry,False,False,,F
+56TRD2,TRD,Journeyman Technician,intermediate,False,False,,F
+57TRD3,TRD,Senior Technician,senior,False,True,,F
+58TRD4,TRD,Lead Technician,lead,True,True,,F
+59TRD5,TRD,Shop Foreman,manager,True,True,,O
+60WHS1,WHSE,Warehouse Associate,entry,False,False,,F
+61WHS2,WHSE,Warehouse Clerk,intermediate,False,False,,F
+62WHS3,WHSE,Senior Warehouse Clerk,senior,False,True,,F
+63WHS4,WHSE,Warehouse Lead,lead,True,True,,F
+64WHS5,WHSE,Warehouse Manager,manager,True,True,,O
+65TEC1,TECH,Field Technician,entry,False,False,,F
+66TEC2,TECH,Service Technician,intermediate,False,False,,F
+67TEC3,TECH,Senior Service Technician,senior,False,True,,F
+68TEC4,TECH,Technical Specialist,lead,True,True,,F
+69TEC5,TECH,Technical Services Manager,manager,True,True,,O
+70MKT1,MKTG,Marketing Coordinator,entry,False,False,,F
+71MKT2,MKTG,Marketing Specialist,intermediate,False,False,,F
+72MKT3,MKTG,Senior Marketing Specialist,senior,False,True,,F
+73MKT4,MKTG,Marketing Lead,lead,True,True,,F
+74MKT5,MKTG,Marketing Manager,manager,True,True,,O
+75MKT6,MKTG,Director of Marketing,director,True,True,,O
+76MKT7,MKTG,Chief Marketing Officer,executive,True,True,,O
+77ANL1,ANLYT,Data Analyst,entry,False,False,,F
+78ANL2,ANLYT,Business Analyst,intermediate,False,False,,F
+79ANL3,ANLYT,Senior Data Analyst,senior,False,True,,F
+80ANL4,ANLYT,Analytics Lead,lead,True,True,,F
+81ANL5,ANLYT,Analytics Manager,manager,True,True,,O
+82ANL6,ANLYT,Director of Analytics,director,True,True,,O
+83SUP4,SUPV,Shift Supervisor,lead,True,True,,F
+84SUP5,SUPV,Area Supervisor,manager,True,True,,O
+85SUP5,SUPV,Regional Supervisor,manager,True,True,,O
+86EXE7,EXEC,Chief Executive Officer,executive,True,True,,O
+87EXE7,EXEC,President,executive,True,True,,O
+88EXE6,EXEC,Vice President,director,True,True,,O
+89PRO2,PROJ,Project Coordinator,intermediate,False,False,,F
+90PRO3,PROJ,Project Manager,senior,False,True,,F
+91PRO4,PROJ,Senior Project Manager,lead,True,True,,F
+92PRO5,PROJ,Program Manager,manager,True,True,,O
+93PRO6,PROJ,Director of PMO,director,True,True,,O
+94LEG2,LEGAL,Paralegal,intermediate,False,False,,F
+95LEG3,LEGAL,Legal Counsel,senior,False,True,,F
+96LEG4,LEGAL,Senior Legal Counsel,lead,True,True,,F
+97LEG6,LEGAL,General Counsel,director,True,True,,O

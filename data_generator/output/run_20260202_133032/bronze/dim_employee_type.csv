@@ -1,0 +1,8 @@
+employee_type_code,employee_type
+RFT,Regular Full Time
+RPT,Regular Part Time
+CON,Contractor
+TAW,Temporary Assignment
+TFT,Temporary Fixed Term
+CAS,Casual
+INT,Intern

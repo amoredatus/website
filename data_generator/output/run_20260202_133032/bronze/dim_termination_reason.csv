@@ -1,0 +1,13 @@
+code,type_code,description,type
+100,V,Other Employment Opportunity,Voluntary
+101,V,Personal/Family Reasons,Voluntary
+102,V,Relocation,Voluntary
+103,V,Return to Education,Voluntary
+202,V,Retirement,Voluntary
+200,I,Lack of Work,Involuntary
+201,I,End of Temporary Assignment,Involuntary
+205,I,Performance,Involuntary
+206,I,Misconduct,Involuntary
+207,I,Failed Probation,Involuntary
+210,I,Position Elimination,Involuntary
+TRO,T,Transfer Out,Transfer

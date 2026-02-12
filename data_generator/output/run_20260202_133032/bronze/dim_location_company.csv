@@ -1,0 +1,58 @@
+company_code,company_name,location_code,location,inactivation_date,inactive
+NRTHP,Northern Pipeline Services Inc.,100,Calgary Office,,False
+NRTHP,Northern Pipeline Services Inc.,108,Fort McMurray Office,,False
+NRTHP,Northern Pipeline Services Inc.,116,Hamilton Office,,False
+NRTHP,Northern Pipeline Services Inc.,113,Prince George Office,,False
+NRTHP,Northern Pipeline Services Inc.,117,London Office,,False
+NRTHP,Northern Pipeline Services Inc.,118,Thunder Bay Office,,False
+NRTHP,Northern Pipeline Services Inc.,109,Grande Prairie Office,,False
+NRTHP,Northern Pipeline Services Inc.,124,Anchorage Office,,False
+NRTHP,Northern Pipeline Services Inc.,102,Vancouver Office,,False
+NRTHP,Northern Pipeline Services Inc.,111,Lethbridge Office,,False
+NRTHP,Northern Pipeline Services Inc.,123,St. John's Office,,False
+NRTHP,Northern Pipeline Services Inc.,104,Mississauga Office,,False
+NRTHP,Northern Pipeline Services Inc.,103,Toronto Office,,False
+NRTHP,Northern Pipeline Services Inc.,120,Halifax Office,,False
+NRTHP,Northern Pipeline Services Inc.,101,Edmonton Office,,False
+NRTHP,Northern Pipeline Services Inc.,119,Sudbury Office,,False
+NRTHP,Northern Pipeline Services Inc.,112,Kamloops Office,,False
+NRTHP,Northern Pipeline Services Inc.,122,Moncton Office,,False
+NRTHP,Northern Pipeline Services Inc.,115,Ottawa Office,,False
+NRTHP,Northern Pipeline Services Inc.,121,Saint John Office,,False
+NRTHP,Northern Pipeline Services Inc.,114,Kelowna Office,,False
+WSTMF,Westmark Manufacturing Co.,110,Red Deer Office,,False
+WSTMF,Westmark Manufacturing Co.,106,Regina Office,,False
+WSTMF,Westmark Manufacturing Co.,102,Vancouver Office,,False
+WSTMF,Westmark Manufacturing Co.,113,Prince George Office,,False
+WSTMF,Westmark Manufacturing Co.,100,Calgary Office,,False
+WSTMF,Westmark Manufacturing Co.,108,Fort McMurray Office,,False
+WSTMF,Westmark Manufacturing Co.,115,Ottawa Office,,False
+WSTMF,Westmark Manufacturing Co.,118,Thunder Bay Office,,False
+WSTMF,Westmark Manufacturing Co.,104,Mississauga Office,,False
+WSTMF,Westmark Manufacturing Co.,107,Winnipeg Office,,False
+WSTMF,Westmark Manufacturing Co.,124,Anchorage Office,,False
+WSTMF,Westmark Manufacturing Co.,105,Saskatoon Office,,False
+WSTMF,Westmark Manufacturing Co.,122,Moncton Office,,False
+WSTMF,Westmark Manufacturing Co.,111,Lethbridge Office,,False
+PRMRE,Prairie Resources Ltd.,122,Moncton Office,,False
+PRMRE,Prairie Resources Ltd.,123,St. John's Office,,False
+PRMRE,Prairie Resources Ltd.,115,Ottawa Office,,False
+PRMRE,Prairie Resources Ltd.,100,Calgary Office,,False
+PRMRE,Prairie Resources Ltd.,124,Anchorage Office,,False
+PRMRE,Prairie Resources Ltd.,118,Thunder Bay Office,,False
+PRMRE,Prairie Resources Ltd.,116,Hamilton Office,,False
+PRMRE,Prairie Resources Ltd.,121,Saint John Office,,False
+PRMRE,Prairie Resources Ltd.,105,Saskatoon Office,,False
+PRMRE,Prairie Resources Ltd.,102,Vancouver Office,,False
+PRMRE,Prairie Resources Ltd.,117,London Office,,False
+ALPNC,Alpine Construction Group,121,Saint John Office,,False
+ALPNC,Alpine Construction Group,115,Ottawa Office,,False
+ALPNC,Alpine Construction Group,104,Mississauga Office,,False
+ALPNC,Alpine Construction Group,116,Hamilton Office,,False
+ALPNC,Alpine Construction Group,124,Anchorage Office,,False
+ALPNC,Alpine Construction Group,111,Lethbridge Office,,False
+ALPNC,Alpine Construction Group,119,Sudbury Office,,False
+ALPNC,Alpine Construction Group,100,Calgary Office,,False
+ALPNC,Alpine Construction Group,114,Kelowna Office,,False
+ALPNC,Alpine Construction Group,112,Kamloops Office,,False
+ALPNC,Alpine Construction Group,102,Vancouver Office,,False

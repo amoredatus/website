@@ -1,0 +1,19 @@
+job_family_code,job_family
+ADMIN,Administrative
+ACCTG,Accounting
+CSR,Customer Service
+ENGR,Engineering
+HR,Human Resources
+IT,Information Technology
+LEGAL,Legal
+MGR,Management
+MKTG,Marketing
+OPS,Operations
+SALES,Sales
+TECH,Technical
+TRD,Trades
+WHSE,Warehouse
+SUPV,Supervision
+EXEC,Executive
+ANLYT,Analytics
+PROJ,Project Management

@@ -1,0 +1,26 @@
+organization_code,report_category,status_code,status,organization
+10,Operations,A,Active,Calgary Operations
+20,Operations,A,Active,Edmonton Operations
+30,Operations,A,Active,Vancouver Operations
+40,Operations,A,Active,Toronto Operations
+50,Operations,A,Active,Mississauga Operations
+60,Operations,A,Active,Saskatoon Operations
+70,Operations,A,Active,Regina Operations
+80,Operations,A,Active,Winnipeg Operations
+90,Operations,A,Active,Fort McMurray Operations
+100,Operations,A,Active,Grande Prairie Operations
+110,Operations,A,Active,Red Deer Operations
+120,Operations,A,Active,Lethbridge Operations
+130,Operations,A,Active,Kamloops Operations
+140,Operations,A,Active,Prince George Operations
+150,Operations,A,Active,Kelowna Operations
+160,Operations,A,Active,Ottawa Operations
+170,Operations,A,Active,Hamilton Operations
+180,Operations,A,Active,London Operations
+190,Operations,A,Active,Thunder Bay Operations
+200,Operations,A,Active,Sudbury Operations
+210,Operations,A,Active,Halifax Operations
+220,Operations,A,Active,Saint John Operations
+230,Operations,A,Active,Moncton Operations
+240,Operations,A,Active,St. John's Operations
+250,Operations,A,Active,Anchorage Operations

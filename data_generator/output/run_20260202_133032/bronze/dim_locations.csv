@@ -1,0 +1,26 @@
+location_code,description,address_line_1,address_line_2,city,county,stateprovince_code,country,address_country_code,zippostal_code,latitude,longitude,timezone
+100,Calgary Office,1924 Industrial Way,,Calgary,,AB,Canada,CA,T3H 2D8,,,America/Edmonton
+101,Edmonton Office,1524 Third Street,,Edmonton,,AB,Canada,CA,T1G 3T9,,,America/Edmonton
+102,Vancouver Office,534 Innovation Way,,Vancouver,,BC,Canada,CA,V3R 9J0,,,America/Vancouver
+103,Toronto Office,2715 Third Boulevard,,Toronto,,ON,Canada,CA,M2G 5D1,,,America/Toronto
+104,Mississauga Office,6324 Business Boulevard,,Mississauga,,ON,Canada,CA,M9J 0R8,,,America/Toronto
+105,Saskatoon Office,2145 Second Street,,Saskatoon,,SK,Canada,CA,S9M 9G1,,,America/Regina
+106,Regina Office,850 Logistics Place,,Regina,,SK,Canada,CA,S1H 1N4,,,America/Regina
+107,Winnipeg Office,7528 First Avenue,,Winnipeg,,MB,Canada,CA,R5G 4Y1,,,America/Winnipeg
+108,Fort McMurray Office,2903 Logistics Avenue,,Fort McMurray,,AB,Canada,CA,T6J 8H5,,,America/Edmonton
+109,Grande Prairie Office,1016 Logistics Place,,Grande Prairie,,AB,Canada,CA,T5N 4C3,,,America/Edmonton
+110,Red Deer Office,9392 Main Avenue,,Red Deer,,AB,Canada,CA,T6X 7E4,,,America/Edmonton
+111,Lethbridge Office,2387 Logistics Way,,Lethbridge,,AB,Canada,CA,T9P 9N5,,,America/Edmonton
+112,Kamloops Office,3693 Corporate Road,,Kamloops,,BC,Canada,CA,V1B 1E2,,,America/Vancouver
+113,Prince George Office,7016 Enterprise Drive,,Prince George,,BC,Canada,CA,V9R 8J8,,,America/Vancouver
+114,Kelowna Office,288 Business Way,,Kelowna,,BC,Canada,CA,V5D 4P2,,,America/Vancouver
+115,Ottawa Office,7533 Industrial Way,,Ottawa,,ON,Canada,CA,M8F 8D4,,,America/Toronto
+116,Hamilton Office,8417 Innovation Avenue,,Hamilton,,ON,Canada,CA,M2U 8A9,,,America/Toronto
+117,London Office,5410 Maple Street,,London,,ON,Canada,CA,K5K 3B3,,,America/Toronto
+118,Thunder Bay Office,9395 Enterprise Street,,Thunder Bay,,ON,Canada,CA,N1U 2E7,,,America/Toronto
+119,Sudbury Office,9107 Technology Boulevard,,Sudbury,,ON,Canada,CA,P9P 3U3,,,America/Toronto
+120,Halifax Office,5207 Second Way,,Halifax,,NS,Canada,CA,B7T 7D3,,,America/Halifax
+121,Saint John Office,3781 Enterprise Boulevard,,Saint John,,NB,Canada,CA,E9U 3V3,,,America/Moncton
+122,Moncton Office,217 Enterprise Way,,Moncton,,NB,Canada,CA,E3C 0L1,,,America/Moncton
+123,St. John's Office,8523 Logistics Boulevard,,St. John's,,NL,Canada,CA,A3U 2V9,,,America/St_Johns
+124,Anchorage Office,7844 Logistics Place,,Anchorage,,AK,USA,US,71993,,,America/Anchorage
